@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 public class WorldGenerator : MonoBehaviour
 {
-    public const int TILE_DIMENSION = 5;
+    public const int TILE_DIMENSION = 10;
+
+    [Header ("References")]
+    public ChunkManager chunkManager;
 
     [Header("World data")]
 
@@ -36,6 +40,8 @@ public class WorldGenerator : MonoBehaviour
     public int loadDistance = 20;
 
     public Vector3 offset;
+
+    public UnityEvent OnPlayerMoved;
 
     [Header("Gizmos")]
     public bool drawGizmos;
@@ -91,8 +97,8 @@ public class WorldGenerator : MonoBehaviour
 
         tilesForDirectionSwitch = random.Next (tileDirectionChangeAmount.x, tileDirectionChangeAmount.y);
 
-        head = CreateNode (offset, CurrentBiome, currentDirection);
-
+        head = CreateNode (offset, CurrentBiome,TileType.FORWARD, currentDirection);
+        chunkManager.AddNewNode (head);
         tileCount = 1;
 
         tail = head;
@@ -109,6 +115,7 @@ public class WorldGenerator : MonoBehaviour
             float distance = Vector3.Distance (tail.position, loader.position);
 
             lastPlayerTilePos = playerTilePos;
+            OnPlayerMoved?.Invoke ( );
 
             if(distance <= loadDistance )
             {
@@ -124,6 +131,8 @@ public class WorldGenerator : MonoBehaviour
         {
             tail.next = GenerateNode ( );
 
+            chunkManager.AddNewNode (tail.next);
+
             tail = tail.next;
         }
         while ( Vector3.Distance (tail.position, loader.position) <= loadDistance );
@@ -132,20 +141,66 @@ public class WorldGenerator : MonoBehaviour
     #region Generation
     public WorldNode GenerateNode ( )
     {
+
+        TileType type = random.Next (0, 100) <= CurrentBiome.sideWayChance ? TileType.FORWARD_SIDEWAYS : TileType.FORWARD;
+
+        Vector3 position = GenerateNodePosition ( );
+
         currentDirectionCounter++;
 
         if ( currentDirectionCounter >= tilesForDirectionSwitch )
+        {
+            Direction previousDirection = currentDirection;
             ChangeDirection (tail.position );
+
+            switch ( previousDirection )
+            {
+                case Direction.NORTH:
+                    switch ( currentDirection )
+                    {
+                        case Direction.EAST:
+                            type = TileType.RIGHT;
+                            break;
+                        case Direction.WEST:
+                            type = TileType.LEFT;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case Direction.EAST:
+                    switch ( currentDirection )
+                    {
+                        case Direction.NORTH:
+                            type = TileType.LEFT;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case Direction.WEST:
+                    switch ( currentDirection )
+                    {
+                        case Direction.NORTH:
+                            type = TileType.RIGHT;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
 
         currentBiomeCounter++;
         if ( currentBiomeCounter >= tilesForBiomeSwitch )
             ChangeBiome ( );
 
 
-        Vector3 position = GenerateNodePosition ( );
         tileCount++;
 
-        return CreateNode (position,CurrentBiome,currentDirection );
+        return CreateNode (position, CurrentBiome, type, currentDirection );
     }
 
     Vector3 GenerateNodePosition ( )
@@ -209,12 +264,13 @@ public class WorldGenerator : MonoBehaviour
 
     #endregion
 
-    public WorldNode CreateNode (Vector3 position, Biome biome, Direction direction )
+    public WorldNode CreateNode (Vector3 position, Biome biome, TileType tileType,  Direction direction )
     {
         return new WorldNode
         {
             position = position,
             biome = biome,
+            type = tileType,
             direction = direction,
         };
     }

@@ -9,6 +9,7 @@ public class WorldNode
     public Vector3 position;
     public Biome biome;
     public Direction direction;
+    public TileType type;
 
     public WorldNode next;
 

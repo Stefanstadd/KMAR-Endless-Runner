@@ -123,6 +123,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &104905639
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 104905640}
+  - component: {fileID: 104905641}
+  m_Layer: 0
+  m_Name: ChunkManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &104905640
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104905639}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &104905641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104905639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26e3f1226b2ae0841a68dd2621e3e39d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderDistance: 80
+  player: {fileID: 1915650633}
 --- !u!1 &111689225
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,28 +198,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dbdb3f8574345b4599800b6c5c9ed5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chunkManager: {fileID: 104905641}
   biomes:
   - biomeName: City
     biomeColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
-    forwardTile: {fileID: 0}
-    forwardSidewaysTile: {fileID: 0}
-    leftTile: {fileID: 0}
-    rightTile: {fileID: 0}
-  - biomeName: Forest
-    biomeColor: {r: 0.57924527, g: 1, b: 0.5941918, a: 1}
-    forwardTile: {fileID: 0}
-    forwardSidewaysTile: {fileID: 0}
-    leftTile: {fileID: 0}
-    rightTile: {fileID: 0}
+    sideWayChance: 20
+    forwardTile: {fileID: 3259464450194227285, guid: f4d85e301e7fd994eb81360fa8ac1657,
+      type: 3}
+    forwardSidewaysTile: {fileID: 682462772747619972, guid: 4f5822da15ec1ec499aea52d099d65b1,
+      type: 3}
+    leftTile: {fileID: 2607076358633009788, guid: f79a8bac6adba6a4b819a43dcce4bd66,
+      type: 3}
+    rightTile: {fileID: 4206087961169976509, guid: 6d19f496a23b9f44abf875f7cf92f951,
+      type: 3}
   randomSeed: 1
   seed: 0
   loader: {fileID: 1915650633}
   useTurns: 1
   rotationAdaptTreshold: 80
-  tileDirectionChangeAmount: {x: 5, y: 12}
+  tileDirectionChangeAmount: {x: 3, y: 8}
   biomeChangeAmount: {x: 15, y: 50}
-  loadDistance: 20
+  loadDistance: 50
   offset: {x: 0, y: 0, z: 0}
+  OnPlayerMoved:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 104905641}
+        m_TargetAssemblyTypeName: ChunkManager, Assembly-CSharp
+        m_MethodName: ManageChunkLoading
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   drawGizmos: 1
   gizmoSize: 1
 --- !u!4 &111689227
@@ -439,4 +500,5 @@ SceneRoots:
   - {fileID: 618285605}
   - {fileID: 1894840734}
   - {fileID: 111689227}
+  - {fileID: 104905640}
   - {fileID: 1915650633}

@@ -8,7 +8,7 @@ public struct Biome
     [Header ("Biome Data")]
     public string biomeName;
     public Color biomeColor;
-
+    public float sideWayChance;
 
     [Header ("Tiles")]
     public GameObject forwardTile;
