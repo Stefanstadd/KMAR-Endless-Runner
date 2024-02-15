@@ -638,11 +638,11 @@ MonoBehaviour:
     type: 3}
   loader: {fileID: 1915650633}
   neighbourCheckAmount: 2
-  noiseScale: 4
+  noiseScale: 2
   noiseMultiplier: 6
-  pathDstDampen: 15
+  pathDstDampen: 25
   pathDampMultiplier: 20
-  offset: {x: 0, y: -1, z: 0}
+  offset: {x: 0, y: -1.5, z: 0}
   drawGizmos: 0
   gizmoColor: {r: 0, g: 0, b: 0, a: 0}
   gizmoSize: 0
