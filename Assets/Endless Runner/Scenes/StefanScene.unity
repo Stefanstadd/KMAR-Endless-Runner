@@ -259,7 +259,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  drawGizmos: 1
+  drawGizmos: 0
   gizmoSize: 1
 --- !u!4 &111689227
 Transform:
