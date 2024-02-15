@@ -102,6 +102,8 @@ public class WorldGenerator : MonoBehaviour
         tileCount = 1;
 
         tail = head;
+
+        ContinueGeneration ( );
     }
 
     private void FixedUpdate ( )
@@ -311,9 +313,9 @@ public class WorldGenerator : MonoBehaviour
     /// <returns></returns>
     public static Vector3 ToTilePosition(Vector3 globalPosition )
     {
-        float x = Mathf.RoundToInt (globalPosition.x + Mathf.Epsilon / TILE_DIMENSION) * TILE_DIMENSION;
-        float y = Mathf.RoundToInt (globalPosition.y + Mathf.Epsilon / TILE_DIMENSION) * TILE_DIMENSION;
-        float z = Mathf.RoundToInt (globalPosition.z + Mathf.Epsilon / TILE_DIMENSION) * TILE_DIMENSION;
+        float x = Mathf.RoundToInt (( globalPosition.x + Mathf.Epsilon ) / TILE_DIMENSION)* TILE_DIMENSION;
+        float y = Mathf.RoundToInt (( globalPosition.y + Mathf.Epsilon ) / TILE_DIMENSION)* TILE_DIMENSION;
+        float z = Mathf.RoundToInt (( globalPosition.z + Mathf.Epsilon ) / TILE_DIMENSION)* TILE_DIMENSION;
 
         return new (x, y, z);
     }

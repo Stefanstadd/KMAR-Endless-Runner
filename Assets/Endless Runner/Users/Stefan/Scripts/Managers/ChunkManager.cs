@@ -5,11 +5,15 @@ using UnityEngine;
 
 public class ChunkManager : MonoBehaviour
 {
+    public TerrainGenerator terrain;
+
     private Dictionary<Vector3, GameObject> chunks = new();
 
+    public Dictionary<Vector3, List<WorldNode>> nodes = new();
     public float renderDistance = 30f;
 
     public Transform player;
+
     public void AddNewNode( WorldNode newNode )
     {
         GameObject toSpawn = newNode.type switch
@@ -35,9 +39,21 @@ public class ChunkManager : MonoBehaviour
 
             spawned = Instantiate (toSpawn, newNode.position, Quaternion.identity);
             spawned.transform.localEulerAngles = rotation;
+            spawned.SetActive (false);
         }
 
         chunks[newNode.position] = spawned;
+
+        Vector3 nodeChunkPos = WorldGenerator.ToTilePosition (newNode.position);
+
+        if(!nodes.ContainsKey(nodeChunkPos) )
+        {
+            nodes.Add(nodeChunkPos,new());
+        }
+
+        nodes[nodeChunkPos].Add (newNode);
+
+        terrain.AddOpenChunk (nodeChunkPos);
     }
 
     public void ManageChunkLoading ( )
@@ -49,7 +65,6 @@ public class ChunkManager : MonoBehaviour
                 if ( Vector3.Distance (item.Key, player.position) < renderDistance )
                 {
                     item.Value.SetActive (true);
-
                 }
                 else
                 {
@@ -57,5 +72,27 @@ public class ChunkManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public List<Vector3> NeighboursOf(Vector3 targetChunk )
+    {
+        List<Vector3> result = new ( );
+
+        const int neighbourCheckAmount = 5;
+
+        for ( int x = -neighbourCheckAmount; x < neighbourCheckAmount; x++ )
+        {
+            for ( int z = -neighbourCheckAmount; z < neighbourCheckAmount; z++ )
+            {
+                Vector3 key = targetChunk - new Vector3(WorldGenerator.TILE_DIMENSION * x, 0, WorldGenerator.TILE_DIMENSION * z);
+
+                if ( nodes.ContainsKey (key) )
+                {
+                    result.Add (key);
+                }
+            }
+        }
+
+        return result;
     }
 }
