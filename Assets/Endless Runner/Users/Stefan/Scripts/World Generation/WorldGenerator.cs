@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Rendering;
-using UnityEngine.UIElements;
 
 public class WorldGenerator : MonoBehaviour
 {
@@ -13,7 +8,7 @@ public class WorldGenerator : MonoBehaviour
     [Header ("References")]
     public ChunkManager chunkManager;
 
-    [Header("World data")]
+    [Header ("World data")]
 
     public Biome[] biomes;
 
@@ -22,28 +17,28 @@ public class WorldGenerator : MonoBehaviour
 
     [Header ("Generation Settings")]
 
-    [Tooltip("The object that can load certain parts of the map")]
+    [Tooltip ("The object that can load certain parts of the map")]
     public Transform loader;
 
-    [Tooltip("Can make the path turn left or right")]
+    [Tooltip ("Can make the path turn left or right")]
     public bool useTurns = true;
 
     public float rotationAdaptTreshold = 45;
 
-    [Tooltip("The min and max amount of times a tile can be generated forward before the path will go to the left or right")]
+    [Tooltip ("The min and max amount of times a tile can be generated forward before the path will go to the left or right")]
     public Vector2Int tileDirectionChangeAmount;
 
     [Tooltip ("The min and max amount of times a tile can be generated of a specific biome before the biome changes")]
     public Vector2Int biomeChangeAmount;
 
-    [Tooltip("The minimun distance for the tail of the world to generate in front of the player")]
+    [Tooltip ("The minimun distance for the tail of the world to generate in front of the player")]
     public int loadDistance = 20;
 
     public Vector3 offset;
 
     public UnityEvent OnPlayerMoved;
 
-    [Header("Gizmos")]
+    [Header ("Gizmos")]
     public bool drawGizmos;
     public float gizmoSize;
 
@@ -93,11 +88,11 @@ public class WorldGenerator : MonoBehaviour
 
         positionsSum = offset;
 
-        tilesForBiomeSwitch = random.Next (biomeChangeAmount.x, biomeChangeAmount.y );
+        tilesForBiomeSwitch = random.Next (biomeChangeAmount.x, biomeChangeAmount.y);
 
         tilesForDirectionSwitch = random.Next (tileDirectionChangeAmount.x, tileDirectionChangeAmount.y);
 
-        head = CreateNode (offset, CurrentBiome,TileType.FORWARD, currentDirection);
+        head = CreateNode (offset, CurrentBiome, TileType.FORWARD, currentDirection);
         chunkManager.AddNewNode (head);
         tileCount = 1;
 
@@ -108,18 +103,19 @@ public class WorldGenerator : MonoBehaviour
 
     private void FixedUpdate ( )
     {
-        if ( loader == null ) return;
+        if ( loader == null )
+            return;
 
         var playerTilePos = ToTilePosition (loader.position);
 
-        if(playerTilePos != lastPlayerTilePos ) // The player has moved, might load a new chunk
+        if ( playerTilePos != lastPlayerTilePos ) // The player has moved, might load a new chunk
         {
             float distance = Vector3.Distance (tail.position, loader.position);
 
             lastPlayerTilePos = playerTilePos;
             OnPlayerMoved?.Invoke ( );
 
-            if(distance <= loadDistance )
+            if ( distance <= loadDistance )
             {
                 ContinueGeneration ( );
             }
@@ -148,53 +144,55 @@ public class WorldGenerator : MonoBehaviour
 
         Vector3 position = GenerateNodePosition ( );
 
-        currentDirectionCounter++;
-
-        if ( currentDirectionCounter >= tilesForDirectionSwitch )
+        if ( useTurns )
         {
-            Direction previousDirection = currentDirection;
-            ChangeDirection (tail.position );
+            currentDirectionCounter++;
 
-            switch ( previousDirection )
+            if ( currentDirectionCounter >= tilesForDirectionSwitch )
             {
-                case Direction.NORTH:
-                    switch ( currentDirection )
-                    {
-                        case Direction.EAST:
-                            type = TileType.RIGHT;
-                            break;
-                        case Direction.WEST:
-                            type = TileType.LEFT;
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case Direction.EAST:
-                    switch ( currentDirection )
-                    {
-                        case Direction.NORTH:
-                            type = TileType.LEFT;
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case Direction.WEST:
-                    switch ( currentDirection )
-                    {
-                        case Direction.NORTH:
-                            type = TileType.RIGHT;
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                default:
-                    break;
+                Direction previousDirection = currentDirection;
+                ChangeDirection (tail.position);
+
+                switch ( previousDirection )
+                {
+                    case Direction.NORTH:
+                        switch ( currentDirection )
+                        {
+                            case Direction.EAST:
+                                type = TileType.RIGHT;
+                                break;
+                            case Direction.WEST:
+                                type = TileType.LEFT;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case Direction.EAST:
+                        switch ( currentDirection )
+                        {
+                            case Direction.NORTH:
+                                type = TileType.LEFT;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case Direction.WEST:
+                        switch ( currentDirection )
+                        {
+                            case Direction.NORTH:
+                                type = TileType.RIGHT;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
-
         currentBiomeCounter++;
         if ( currentBiomeCounter >= tilesForBiomeSwitch )
             ChangeBiome ( );
@@ -202,7 +200,7 @@ public class WorldGenerator : MonoBehaviour
 
         tileCount++;
 
-        return CreateNode (position, CurrentBiome, type, currentDirection );
+        return CreateNode (position, CurrentBiome, type, currentDirection);
     }
 
     Vector3 GenerateNodePosition ( )
@@ -217,21 +215,21 @@ public class WorldGenerator : MonoBehaviour
 
         currentBiomeIndex++;
 
-        if(currentBiomeIndex > biomes.Length - 1 )
+        if ( currentBiomeIndex > biomes.Length - 1 )
         {
             currentBiomeIndex = 0;
         }
 
     }
 
-    void ChangeDirection (Vector3 currentPos )
+    void ChangeDirection ( Vector3 currentPos )
     {
         currentDirectionCounter = 0;
         tilesForDirectionSwitch = random.Next (tileDirectionChangeAmount.x, tileDirectionChangeAmount.y);
 
         Vector3 mid = positionsSum / tileCount;
 
-        float angle = Vector3.Angle ( mid, currentPos );
+        float angle = Vector3.Angle (mid, currentPos);
 
         currentDirection = GetNewDirection (currentDirection);
 
@@ -246,7 +244,7 @@ public class WorldGenerator : MonoBehaviour
 
     }
 
-    Direction GetNewDirection (Direction currentDirection)
+    Direction GetNewDirection ( Direction currentDirection )
     {
         return currentDirection switch
         {
@@ -258,7 +256,7 @@ public class WorldGenerator : MonoBehaviour
 
         };
 
-        Direction NextDirection(Direction a, Direction b )
+        Direction NextDirection ( Direction a, Direction b )
         {
             return random.Next (0, 100) <= 50 ? a : b;
         }
@@ -266,7 +264,7 @@ public class WorldGenerator : MonoBehaviour
 
     #endregion
 
-    public WorldNode CreateNode (Vector3 position, Biome biome, TileType tileType,  Direction direction )
+    public WorldNode CreateNode ( Vector3 position, Biome biome, TileType tileType, Direction direction )
     {
         return new WorldNode
         {
@@ -292,7 +290,7 @@ public class WorldGenerator : MonoBehaviour
             if ( node == null )
                 return;
 
-            if ( node.next != null)
+            if ( node.next != null )
             {
                 Gizmos.color = node.biome.biomeColor;
                 Gizmos.DrawLine (node.position, node.next.position);
@@ -311,35 +309,35 @@ public class WorldGenerator : MonoBehaviour
     /// </summary>
     /// <param name="globalPosition"></param>
     /// <returns></returns>
-    public static Vector3 ToTilePosition(Vector3 globalPosition )
+    public static Vector3 ToTilePosition ( Vector3 globalPosition )
     {
-        float x = Mathf.RoundToInt (( globalPosition.x + Mathf.Epsilon ) / TILE_DIMENSION)* TILE_DIMENSION;
-        float y = Mathf.RoundToInt (( globalPosition.y + Mathf.Epsilon ) / TILE_DIMENSION)* TILE_DIMENSION;
-        float z = Mathf.RoundToInt (( globalPosition.z + Mathf.Epsilon ) / TILE_DIMENSION)* TILE_DIMENSION;
+        float x = Mathf.RoundToInt (( globalPosition.x + Mathf.Epsilon ) / TILE_DIMENSION) * TILE_DIMENSION;
+        float y = Mathf.RoundToInt (( globalPosition.y + Mathf.Epsilon ) / TILE_DIMENSION) * TILE_DIMENSION;
+        float z = Mathf.RoundToInt (( globalPosition.z + Mathf.Epsilon ) / TILE_DIMENSION) * TILE_DIMENSION;
 
         return new (x, y, z);
     }
 
-    public static Direction DirectionFromAngle(float angle )
+    public static Direction DirectionFromAngle ( float angle )
     {
         Direction result = Direction.NORTH;
 
-        if(angle >= 90 )
+        if ( angle >= 90 )
         {
             result = Direction.EAST;
         }
-        if(angle >= 180 )
+        if ( angle >= 180 )
         {
             result = Direction.SOUTH;
         }
-        if(angle >= 270 )
+        if ( angle >= 270 )
         {
             result = Direction.WEST;
         }
         return result;
     }
 
-    public static Vector3 VectorFromDirection(Direction direction )
+    public static Vector3 VectorFromDirection ( Direction direction )
     {
         return direction switch
         {
@@ -347,7 +345,7 @@ public class WorldGenerator : MonoBehaviour
             Direction.EAST => new (1, 0, 0),
             Direction.SOUTH => new (0, 0, -1),
             Direction.WEST => new (-1, 0, 0),
-            _ => new(0,0,1),
+            _ => new (0, 0, 1),
         };
     }
 
