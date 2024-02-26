@@ -1,3 +1,4 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -5,18 +6,18 @@ public class WorldGenerator : MonoBehaviour
 {
     public const int TILE_DIMENSION = 10;
 
+    public delegate void GenerationEvent ( WorldNode node );
+
     [Header ("References")]
     public ChunkManager chunkManager;
 
     [Header ("World data")]
-
     public Biome[] biomes;
 
     public bool randomSeed;
     public int seed;
 
     [Header ("Generation Settings")]
-
     [Tooltip ("The object that can load certain parts of the map")]
     public Transform loader;
 
@@ -38,30 +39,35 @@ public class WorldGenerator : MonoBehaviour
 
     public UnityEvent OnPlayerMoved;
 
+    public GenerationEvent onNodeGenerated;
+
     [Header ("Gizmos")]
     public bool drawGizmos;
+
     public float gizmoSize;
 
     //Private variables
-    System.Random random;
-    Vector3 lastPlayerTilePos;
-    Vector3 positionsSum;
+    private System.Random random;
 
-    int currentBiomeIndex;
+    private Vector3 lastPlayerTilePos;
+    private Vector3 positionsSum;
 
-    WorldNode head;
-    WorldNode tail;
+    private int currentBiomeIndex;
 
-    Vector3 minBounds, maxBounds;
+    [HideInInspector] public WorldNode head;
+    [HideInInspector] public WorldNode tail;
+
+    private Vector3 minBounds, maxBounds;
 
     //Generation values
-    int tileCount;
-    int tilesForBiomeSwitch;
-    int currentBiomeCounter;
+    private int tileCount;
 
-    int tilesForDirectionSwitch;
-    int currentDirectionCounter;
-    Direction currentDirection;
+    private int tilesForBiomeSwitch;
+    private int currentBiomeCounter;
+
+    private int tilesForDirectionSwitch;
+    private int currentDirectionCounter;
+    private Direction currentDirection;
 
     public Biome CurrentBiome
     {
@@ -71,13 +77,12 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
-
     private void Start ( )
     {
         Initialize ( );
     }
 
-    void Initialize ( )
+    private void Initialize ( )
     {
         if ( randomSeed )
             seed = Random.Range (0, 1000000);
@@ -92,11 +97,9 @@ public class WorldGenerator : MonoBehaviour
 
         tilesForDirectionSwitch = random.Next (tileDirectionChangeAmount.x, tileDirectionChangeAmount.y);
 
-        head = CreateNode (offset, CurrentBiome, TileType.FORWARD, currentDirection);
+        head = tail = CreateNode (offset, CurrentBiome, TileType.FORWARD, currentDirection);
         chunkManager.AddNewNode (head);
         tileCount = 1;
-
-        tail = head;
 
         ContinueGeneration ( );
     }
@@ -119,7 +122,6 @@ public class WorldGenerator : MonoBehaviour
             {
                 ContinueGeneration ( );
             }
-
         }
     }
 
@@ -137,9 +139,9 @@ public class WorldGenerator : MonoBehaviour
     }
 
     #region Generation
+
     public WorldNode GenerateNode ( )
     {
-
         TileType type = random.Next (0, 100) <= CurrentBiome.sideWayChance ? TileType.FORWARD_SIDEWAYS : TileType.FORWARD;
 
         Vector3 position = GenerateNodePosition ( );
@@ -161,33 +163,40 @@ public class WorldGenerator : MonoBehaviour
                             case Direction.EAST:
                                 type = TileType.RIGHT;
                                 break;
+
                             case Direction.WEST:
                                 type = TileType.LEFT;
                                 break;
+
                             default:
                                 break;
                         }
                         break;
+
                     case Direction.EAST:
                         switch ( currentDirection )
                         {
                             case Direction.NORTH:
                                 type = TileType.LEFT;
                                 break;
+
                             default:
                                 break;
                         }
                         break;
+
                     case Direction.WEST:
                         switch ( currentDirection )
                         {
                             case Direction.NORTH:
                                 type = TileType.RIGHT;
                                 break;
+
                             default:
                                 break;
                         }
                         break;
+
                     default:
                         break;
                 }
@@ -197,18 +206,17 @@ public class WorldGenerator : MonoBehaviour
         if ( currentBiomeCounter >= tilesForBiomeSwitch )
             ChangeBiome ( );
 
-
         tileCount++;
 
         return CreateNode (position, CurrentBiome, type, currentDirection);
     }
 
-    Vector3 GenerateNodePosition ( )
+    private Vector3 GenerateNodePosition ( )
     {
         return tail.position + VectorFromDirection (currentDirection) * TILE_DIMENSION;
     }
 
-    void ChangeBiome ( )
+    private void ChangeBiome ( )
     {
         currentBiomeCounter = 0;
         tilesForBiomeSwitch = random.Next (biomeChangeAmount.x, biomeChangeAmount.y);
@@ -219,10 +227,9 @@ public class WorldGenerator : MonoBehaviour
         {
             currentBiomeIndex = 0;
         }
-
     }
 
-    void ChangeDirection ( Vector3 currentPos )
+    private void ChangeDirection ( Vector3 currentPos )
     {
         currentDirectionCounter = 0;
         tilesForDirectionSwitch = random.Next (tileDirectionChangeAmount.x, tileDirectionChangeAmount.y);
@@ -241,10 +248,9 @@ public class WorldGenerator : MonoBehaviour
         //{
         //    currentDirection = GetNewDirection (currentDirection);
         //}
-
     }
 
-    Direction GetNewDirection ( Direction currentDirection )
+    private Direction GetNewDirection ( Direction currentDirection )
     {
         return currentDirection switch
         {
@@ -253,7 +259,6 @@ public class WorldGenerator : MonoBehaviour
             //Direction.SOUTH => NextDirection (Direction.WEST, Direction.EAST),
             Direction.WEST => Direction.NORTH,
             _ => NextDirection (Direction.WEST, Direction.EAST),
-
         };
 
         Direction NextDirection ( Direction a, Direction b )
@@ -262,19 +267,22 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
-    #endregion
+    #endregion Generation
 
     public WorldNode CreateNode ( Vector3 position, Biome biome, TileType tileType, Direction direction )
     {
-        return new WorldNode
+        var node = new WorldNode
         {
             position = position,
             biome = biome,
             type = tileType,
             direction = direction,
         };
-    }
 
+        onNodeGenerated?.Invoke (node);
+
+        return node;
+    }
 
     #region Gizmos
 
@@ -283,26 +291,21 @@ public class WorldGenerator : MonoBehaviour
         if ( !drawGizmos )
             return;
 
-        Sample (head);
+        if ( head == null )
+            return;
 
-        void Sample ( WorldNode node )
+
+        for(WorldNode cur = head; cur != null; cur = cur.next )
         {
-            if ( node == null )
-                return;
+            Gizmos.color = cur.biome.biomeColor;
 
-            if ( node.next != null )
-            {
-                Gizmos.color = node.biome.biomeColor;
-                Gizmos.DrawLine (node.position, node.next.position);
-                Gizmos.DrawSphere (node.position, gizmoSize);
-                Sample (node.next);
-            }
+            if(cur.next != null)
+                Gizmos.DrawLine (cur.position, cur.next.position);
+            Gizmos.DrawSphere (cur.position, gizmoSize);
         }
     }
 
-
-    #endregion
-
+    #endregion 
 
     /// <summary>
     /// Converts a position in worldspace to the coordinate of a tile
@@ -360,5 +363,4 @@ public class WorldGenerator : MonoBehaviour
             _ => 0
         };
     }
-
 }

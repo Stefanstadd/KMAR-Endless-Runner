@@ -6,6 +6,7 @@ public class TerrainGenerator : MonoBehaviour
 {
     [Header ("References")]
     public WorldGenerator worldGenerator;
+
     public ChunkManager chunkManager;
 
     [Header ("Chunk Data")]
@@ -21,21 +22,23 @@ public class TerrainGenerator : MonoBehaviour
 
     [Header ("Terrain Settings")]
     public float noiseScale;
+
     public float noiseMultiplier;
     public float pathDstDampen;
     public float pathDampMultiplier;
 
     public Vector3 offset;
 
-    List<Vector3> openChunks = new ( );
-    List<Vector3> toRemove = new ( );
+    private List<Vector3> openChunks = new ( );
+    private List<Vector3> toRemove = new ( );
 
-    List<WorldNode> nodesToCheck;
+    private List<WorldNode> nodesToCheck;
 
-    Dictionary<Vector3, Transform> activePlanes = new ( );
+    private Dictionary<Vector3, Transform> activePlanes = new ( );
 
     [Header ("Gizmos")]
     public bool drawGizmos;
+
     public Color gizmoColor;
     public float gizmoSize;
 
@@ -43,11 +46,11 @@ public class TerrainGenerator : MonoBehaviour
     {
         openChunks.Add (chunk);
     }
+
     public void OnPlayerMove ( )
     {
         foreach ( var chunk in openChunks )
         {
-
             float dst = Vector3.Distance (chunk, loader.position);
 
             if ( dst < generateDistance )
@@ -56,20 +59,17 @@ public class TerrainGenerator : MonoBehaviour
                 {
                     for ( int z = -neighbourCheckAmount; z < neighbourCheckAmount; z++ )
                     {
-                        Vector3 chunkPos = ToPlanePosition(chunk) + new Vector3 (x * planeSize, 0, z * planeSize);
+                        Vector3 chunkPos = ToPlanePosition (chunk) + new Vector3 (x * planeSize, 0, z * planeSize);
 
                         if ( !activePlanes.ContainsKey (chunkPos) )
                         {
-                            var nb = chunkManager.NeighboursOf (chunkPos);
-
                             nodesToCheck = chunkManager.NeighboursOf (chunk).SelectMany (c => chunkManager.nodes[c]).ToList ( );
 
                             GenerateChunk (chunkPos);
                         }
                     }
-
                 }
-                
+
                 toRemove.Add (chunk);
             }
         }
@@ -81,7 +81,7 @@ public class TerrainGenerator : MonoBehaviour
         toRemove.Clear ( );
     }
 
-    void GenerateChunk ( Vector3 chunkPosition )
+    private void GenerateChunk ( Vector3 chunkPosition )
     {
         Vector3 planeCoord = ToPlanePosition (chunkPosition);
 
@@ -135,7 +135,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         Vector3 vertex = vertexPosition + ToPlanePosition (chunk);
 
-        float minDistance = nodesToCheck.Count > 0? nodesToCheck.Min (n => Vector3.Distance (vertex, n.position)) : 15;
+        float minDistance = nodesToCheck.Count > 0 ? nodesToCheck.Min (n => Vector3.Distance (vertex, n.position)) : 15;
 
         float noise = Mathf.PerlinNoise (vertex.x * noiseScale, vertex.z * noiseScale) * noiseMultiplier;
 

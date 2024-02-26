@@ -1,20 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ChunkManager : MonoBehaviour
 {
     public TerrainGenerator terrain;
 
-    private Dictionary<Vector3, GameObject> chunks = new();
+    private Dictionary<Vector3, GameObject> chunks = new ( );
 
-    public Dictionary<Vector3, List<WorldNode>> nodes = new();
+    public Dictionary<Vector3, List<WorldNode>> nodes = new ( );
     public float renderDistance = 30f;
 
     public Transform player;
 
-    public void AddNewNode( WorldNode newNode )
+    public void AddNewNode ( WorldNode newNode )
     {
         GameObject toSpawn = newNode.type switch
         {
@@ -33,9 +31,9 @@ public class ChunkManager : MonoBehaviour
         };
 
         GameObject spawned = null;
-        if(toSpawn != null )
+        if ( toSpawn != null )
         {
-            Vector3 rotation = Vector3.up * (WorldGenerator.AngleFromDirection (newNode.direction) + turnAngle);
+            Vector3 rotation = Vector3.up * ( WorldGenerator.AngleFromDirection (newNode.direction) + turnAngle );
 
             spawned = Instantiate (toSpawn, newNode.position, Quaternion.identity);
             spawned.transform.localEulerAngles = rotation;
@@ -46,9 +44,9 @@ public class ChunkManager : MonoBehaviour
 
         Vector3 nodeChunkPos = WorldGenerator.ToTilePosition (newNode.position);
 
-        if(!nodes.ContainsKey(nodeChunkPos) )
+        if ( !nodes.ContainsKey (nodeChunkPos) )
         {
-            nodes.Add(nodeChunkPos,new());
+            nodes.Add (nodeChunkPos, new ( ));
         }
 
         nodes[nodeChunkPos].Add (newNode);
@@ -60,7 +58,7 @@ public class ChunkManager : MonoBehaviour
     {
         foreach ( var item in chunks )
         {
-            if(item.Value != null )
+            if ( item.Value != null )
             {
                 if ( Vector3.Distance (item.Key, player.position) < renderDistance )
                 {
@@ -74,7 +72,7 @@ public class ChunkManager : MonoBehaviour
         }
     }
 
-    public List<Vector3> NeighboursOf(Vector3 targetChunk )
+    public List<Vector3> NeighboursOf ( Vector3 targetChunk )
     {
         List<Vector3> result = new ( );
 
@@ -84,7 +82,7 @@ public class ChunkManager : MonoBehaviour
         {
             for ( int z = -neighbourCheckAmount; z < neighbourCheckAmount; z++ )
             {
-                Vector3 key = targetChunk - new Vector3(WorldGenerator.TILE_DIMENSION * x, 0, WorldGenerator.TILE_DIMENSION * z);
+                Vector3 key = targetChunk - new Vector3 (WorldGenerator.TILE_DIMENSION * x, 0, WorldGenerator.TILE_DIMENSION * z);
 
                 if ( nodes.ContainsKey (key) )
                 {
