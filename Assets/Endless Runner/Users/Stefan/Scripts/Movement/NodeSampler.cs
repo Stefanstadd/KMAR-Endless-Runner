@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class NodeSampler : MonoBehaviour
@@ -14,13 +16,13 @@ public class NodeSampler : MonoBehaviour
 
     private WorldNode m_nextNode;
 
-    protected WorldNode CurrentNode
+    public WorldNode CurrentNode
     {
         get
         {
             return m_currentNode;
         }
-        set
+        private set
         {
             if ( value == m_currentNode )
                 return;
@@ -30,7 +32,7 @@ public class NodeSampler : MonoBehaviour
         }
     }
 
-    protected WorldNode NextNode
+    public WorldNode NextNode
     {
         get
         {
@@ -50,46 +52,28 @@ public class NodeSampler : MonoBehaviour
         }
     }
 
-    protected virtual void OnEnable ( )
-    {
-        Coms.WorldGenerator.onNodeGenerated += AddNodeToSample;
-    }
 
-    protected virtual void OnDisable ( )
+    public void SetCurrentNode(WorldNode node )
     {
-        Coms.WorldGenerator.onNodeGenerated -= AddNodeToSample;
-    }
-
-    protected virtual void Update ( )
-    {
-        if ( CurrentNode == null )
+        if(node == null)
         {
-            if( nodeQueue.Count == 0 )
-            {
-                return;
-            }
-            MoveToNextNode ( );
+            Debug.Log ("Node is null");
+            return;
         }
-    }
 
+        CurrentNode = node;
+        NextNode = CurrentNode.next;
+    }
 
     protected void MoveToNextNode ( )
     {
-        CurrentNode = nodeQueue.Dequeue ( );
+        CurrentNode = CurrentNode.next;
 
-        if ( nodeQueue.TryPeek (out WorldNode next) )
-            NextNode = next;
-        else
-            NextNode = null;
+        NextNode = CurrentNode.next;
     }
 
     protected virtual void OnCurrentNodeChanged ( )
     {
 
-    }
-
-    void AddNodeToSample(WorldNode node )
-    {
-        nodeQueue.Enqueue( node );
     }
 }

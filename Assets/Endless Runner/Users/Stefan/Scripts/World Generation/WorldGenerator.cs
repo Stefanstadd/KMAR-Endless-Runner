@@ -144,8 +144,10 @@ public class WorldGenerator : MonoBehaviour
     {
         TileType type = random.Next (0, 100) <= CurrentBiome.sideWayChance ? TileType.FORWARD_SIDEWAYS : TileType.FORWARD;
 
+        //Calculate Position
         Vector3 position = GenerateNodePosition ( );
 
+        //Handle Turning
         if ( useTurns )
         {
             currentDirectionCounter++;
@@ -202,6 +204,8 @@ public class WorldGenerator : MonoBehaviour
                 }
             }
         }
+
+        //Handle Biome Changing
         currentBiomeCounter++;
         if ( currentBiomeCounter >= tilesForBiomeSwitch )
             ChangeBiome ( );

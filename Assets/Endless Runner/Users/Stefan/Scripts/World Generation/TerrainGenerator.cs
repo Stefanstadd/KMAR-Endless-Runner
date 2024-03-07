@@ -11,6 +11,7 @@ public class TerrainGenerator : MonoBehaviour
 
     [Header ("Chunk Data")]
     public float generateDistance;
+    public float renderDistance = 40;
 
     public int planeSize = 30;
     public int vertexDensity = 16;
@@ -49,22 +50,29 @@ public class TerrainGenerator : MonoBehaviour
 
     public void OnPlayerMove ( )
     {
+        CheckForGenerateChunks ( );
+
+        CheckForRenderChunks ( );
+    }
+
+    void CheckForGenerateChunks ( )
+    {
         foreach ( var chunk in openChunks )
         {
             float dst = Vector3.Distance (chunk, loader.position);
 
+            nodesToCheck = chunkManager.NeighboursOf (chunk).SelectMany (c => chunkManager.nodes[c]).ToList ( );
+
             if ( dst < generateDistance )
             {
-                for ( int x = -neighbourCheckAmount; x < neighbourCheckAmount; x++ )
+                for ( int x = -neighbourCheckAmount; x <= neighbourCheckAmount; x++ )
                 {
-                    for ( int z = -neighbourCheckAmount; z < neighbourCheckAmount; z++ )
+                    for ( int z = -neighbourCheckAmount; z <= neighbourCheckAmount; z++ )
                     {
                         Vector3 chunkPos = ToPlanePosition (chunk) + new Vector3 (x * planeSize, 0, z * planeSize);
 
                         if ( !activePlanes.ContainsKey (chunkPos) )
                         {
-                            nodesToCheck = chunkManager.NeighboursOf (chunk).SelectMany (c => chunkManager.nodes[c]).ToList ( );
-
                             GenerateChunk (chunkPos);
                         }
                     }
@@ -79,6 +87,32 @@ public class TerrainGenerator : MonoBehaviour
             openChunks.Remove (remChunk);
         }
         toRemove.Clear ( );
+    }
+
+    void CheckForRenderChunks ( )
+    {
+        List<Vector3> keysToRemove = new ( );
+
+        foreach ( var chunk in activePlanes )
+        {
+            float dst = Vector3.Distance (chunk.Key, loader.position);
+
+            if ( dst < renderDistance && !chunk.Value.gameObject.activeSelf )
+            {
+                chunk.Value.gameObject.SetActive (true);
+            }
+            else if ( dst > renderDistance && chunk.Value.gameObject.activeSelf )
+            {
+                keysToRemove.Add (chunk.Key);
+            }
+        }
+
+        foreach ( var toRemove in keysToRemove )
+        {
+            Destroy (activePlanes[toRemove].gameObject);
+
+            activePlanes.Remove (toRemove);
+        }
     }
 
     private void GenerateChunk ( Vector3 chunkPosition )
@@ -135,15 +169,17 @@ public class TerrainGenerator : MonoBehaviour
     {
         Vector3 vertex = vertexPosition + ToPlanePosition (chunk);
 
-        float minDistance = nodesToCheck.Count > 0 ? nodesToCheck.Min (n => Vector3.Distance (vertex, n.position)) : 15;
-
         float noise = Mathf.PerlinNoise (vertex.x * noiseScale, vertex.z * noiseScale) * noiseMultiplier;
 
-        if ( minDistance < pathDstDampen )
+        if ( nodesToCheck != null && nodesToCheck.Count > 0 )
         {
-            float mult = Mathf.InverseLerp (0, pathDstDampen, minDistance);
+            float minDistance = nodesToCheck.Min (n => Vector3.Distance (vertex, n.position));
+            if ( minDistance < pathDstDampen )
+            {
+                float mult = Mathf.InverseLerp (0, pathDstDampen, minDistance);
 
-            noise *= mult;
+                noise *= mult * pathDampMultiplier;
+            }
         }
 
         return noise;

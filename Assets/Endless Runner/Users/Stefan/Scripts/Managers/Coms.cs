@@ -37,6 +37,46 @@ public static class Coms
         }
     }
 
+    private static PlayerMovement playerMovement;
+
+    public static PlayerMovement PlayerMovement
+    {
+        get
+        {
+            return Find (ref playerMovement);
+        }
+    }
+
+    private static RobbersManager robbersManager;
+
+    public static RobbersManager RobbersManager
+    {
+        get
+        {
+            return Find (ref robbersManager);
+        }
+    }
+
+    private static TimeManager timeManager;
+
+    public static TimeManager TimeManager
+    {
+        get
+        {
+            return Find (ref timeManager);
+        }
+    }
+
+    private static UIPulseEffect uiPulseEffect;
+
+    public static UIPulseEffect UIPulseEffect
+    {
+        get
+        {
+            return Find (ref uiPulseEffect);
+        }
+    }
+
 
 
     // Private methods

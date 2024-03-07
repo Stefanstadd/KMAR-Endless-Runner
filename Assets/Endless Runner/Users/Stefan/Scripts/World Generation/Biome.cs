@@ -9,10 +9,13 @@ public class Biome
     public Color biomeColor;
     public float sideWayChance;
 
-    [Header ("Tiles")]
-    public GameObject forwardTile;
+    [Header ("Obstacles")]
+    public float generalObstacleChance;
 
-    public GameObject forwardSidewaysTile;
-    public GameObject leftTile;
-    public GameObject rightTile;
+    [Header ("Tiles")]
+    public TileData forwardTile;
+
+    public TileData forwardSidewaysTile;
+    public TileData leftTile;
+    public TileData rightTile;
 }

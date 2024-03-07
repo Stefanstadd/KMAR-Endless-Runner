@@ -14,7 +14,7 @@ public class ChunkManager : MonoBehaviour
 
     public void AddNewNode ( WorldNode newNode )
     {
-        GameObject toSpawn = newNode.type switch
+        TileData tile = newNode.type switch
         {
             TileType.FORWARD => newNode.biome.forwardTile,
             TileType.FORWARD_SIDEWAYS => newNode.biome.forwardSidewaysTile,
@@ -31,14 +31,33 @@ public class ChunkManager : MonoBehaviour
         };
 
         GameObject spawned = null;
-        if ( toSpawn != null )
+        if ( tile != null )
         {
             Vector3 rotation = Vector3.up * ( WorldGenerator.AngleFromDirection (newNode.direction) + turnAngle );
 
-            spawned = Instantiate (toSpawn, newNode.position, Quaternion.identity);
+            spawned = Instantiate (tile.tilePrefab, newNode.position, Quaternion.identity);
             spawned.transform.localEulerAngles = rotation;
-            spawned.SetActive (false);
         }
+
+        float r = Random.Range (0, 100);
+
+        if ( r < newNode.biome.generalObstacleChance && r < tile.obstacleChance )
+        {
+            foreach ( ObstacleObject obstacleGenerator in tile.obstacles )
+            {
+                float r2 = Random.Range (0, 100);
+
+                if(r2 < obstacleGenerator.chanceToSpawn )
+                {
+                    foreach ( GameObject spawnedObstacle in obstacleGenerator.GenerateObstacle (newNode))
+                    {
+                        spawnedObstacle.transform.SetParent (spawned.transform);
+                    }
+                }
+            }
+        }
+
+        spawned.SetActive (false);
 
         chunks[newNode.position] = spawned;
 
