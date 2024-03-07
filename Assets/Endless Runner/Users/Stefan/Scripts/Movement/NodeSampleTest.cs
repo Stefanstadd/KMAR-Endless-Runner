@@ -8,10 +8,8 @@ public class NodeSampleTest : NodeSampler
 
     Vector3 rotVelocity;
 
-    protected override void Update ( )
+    protected  void Update ( )
     {
-
-        base.Update ( );
 
         if ( CurrentNode == null || NextNode == null )
             return;
