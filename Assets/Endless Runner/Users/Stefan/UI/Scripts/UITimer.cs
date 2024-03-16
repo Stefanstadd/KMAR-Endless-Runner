@@ -17,6 +17,9 @@ public class UITimer : MonoBehaviour
     [SerializeField]
     float _currentTime;
 
+    [SerializeField]
+    Transform[] uiEffectObjects; 
+
     float CurrentTime
     {
         get
@@ -58,5 +61,10 @@ public class UITimer : MonoBehaviour
     public void AddTime(float addTime )
     {
         CurrentTime += addTime;
+    }
+
+    public void PingTimer ( )
+    {
+        Coms.UIPulseEffect.ApplyEffect (uiEffectObjects);
     }
 }

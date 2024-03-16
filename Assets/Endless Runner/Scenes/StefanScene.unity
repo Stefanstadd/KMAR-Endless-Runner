@@ -487,27 +487,31 @@ MonoBehaviour:
     sideWayChance: 20
     generalObstacleChance: 100
     forwardTile:
-      tilePrefab: {fileID: 3259464450194227285, guid: f4d85e301e7fd994eb81360fa8ac1657,
-        type: 3}
+      prefabs:
+      - {fileID: 7825744118658075861, guid: e2b7544ceda8f294ab5a594b71a4e535, type: 3}
+      - {fileID: 7825744118658075861, guid: ac468147366d992478bde19e811cd03b, type: 3}
+      - {fileID: 7825744118658075861, guid: 6646f667d8a05f445989ee30fd6efe9a, type: 3}
       obstacleChance: 80
       obstacles:
       - {fileID: 11400000, guid: 47dde97b858501b47b4dc81a501912e8, type: 2}
       - {fileID: 11400000, guid: 133dde47b05d43d419f7766a97ef5a00, type: 2}
     forwardSidewaysTile:
-      tilePrefab: {fileID: 682462772747619972, guid: 4f5822da15ec1ec499aea52d099d65b1,
-        type: 3}
+      prefabs:
+      - {fileID: 7825744118658075861, guid: 6646f667d8a05f445989ee30fd6efe9a, type: 3}
+      - {fileID: 7825744118658075861, guid: ac468147366d992478bde19e811cd03b, type: 3}
+      - {fileID: 7825744118658075861, guid: e2b7544ceda8f294ab5a594b71a4e535, type: 3}
       obstacleChance: 80
       obstacles:
       - {fileID: 11400000, guid: 47dde97b858501b47b4dc81a501912e8, type: 2}
     leftTile:
-      tilePrefab: {fileID: 2607076358633009788, guid: f79a8bac6adba6a4b819a43dcce4bd66,
-        type: 3}
+      prefabs:
+      - {fileID: 714341285840203267, guid: 055072296d55b134897fd76d99fd7d0c, type: 3}
       obstacleChance: 80
       obstacles:
       - {fileID: 11400000, guid: 47dde97b858501b47b4dc81a501912e8, type: 2}
     rightTile:
-      tilePrefab: {fileID: 4206087961169976509, guid: 6d19f496a23b9f44abf875f7cf92f951,
-        type: 3}
+      prefabs:
+      - {fileID: 6636442952704113597, guid: 1ecdcc39de2b80c49a558bad2bb3bc3e, type: 3}
       obstacleChance: 80
       obstacles:
       - {fileID: 11400000, guid: 47dde97b858501b47b4dc81a501912e8, type: 2}
@@ -516,37 +520,37 @@ MonoBehaviour:
     sideWayChance: 15
     generalObstacleChance: 100
     forwardTile:
-      tilePrefab: {fileID: 1935109268367344875, guid: a0a04923cbbbe3b4586d68c34d420855,
-        type: 3}
+      prefabs:
+      - {fileID: 1935109268367344875, guid: a0a04923cbbbe3b4586d68c34d420855, type: 3}
       obstacleChance: 80
       obstacles:
       - {fileID: 11400000, guid: cee4a104b13572d4c9ac3c6688beb3c4, type: 2}
     forwardSidewaysTile:
-      tilePrefab: {fileID: 6525538324086249927, guid: 8d33ffa15b2760847a2937955b7b45b9,
-        type: 3}
+      prefabs:
+      - {fileID: 6525538324086249927, guid: 8d33ffa15b2760847a2937955b7b45b9, type: 3}
       obstacleChance: 80
       obstacles:
       - {fileID: 11400000, guid: cee4a104b13572d4c9ac3c6688beb3c4, type: 2}
     leftTile:
-      tilePrefab: {fileID: 211541015661838788, guid: f17485bfe0c3be340b79f7d3efc85ec5,
-        type: 3}
+      prefabs:
+      - {fileID: 211541015661838788, guid: f17485bfe0c3be340b79f7d3efc85ec5, type: 3}
       obstacleChance: 80
       obstacles:
       - {fileID: 11400000, guid: cee4a104b13572d4c9ac3c6688beb3c4, type: 2}
     rightTile:
-      tilePrefab: {fileID: 1858759227057031694, guid: 70a1ad4d0612f574997b4aa06feb7455,
-        type: 3}
+      prefabs:
+      - {fileID: 1858759227057031694, guid: 70a1ad4d0612f574997b4aa06feb7455, type: 3}
       obstacleChance: 80
       obstacles:
       - {fileID: 11400000, guid: cee4a104b13572d4c9ac3c6688beb3c4, type: 2}
   randomSeed: 1
   seed: 0
   loader: {fileID: 1595420276}
-  useTurns: 1
+  useTurns: 0
   rotationAdaptTreshold: 80
   tileDirectionChangeAmount: {x: 2, y: 5}
   biomeChangeAmount: {x: 6, y: 35}
-  loadDistance: 225
+  loadDistance: 300
   offset: {x: 0, y: 0, z: 0}
   OnPlayerMoved:
     m_PersistentCalls:
@@ -585,19 +589,19 @@ MonoBehaviour:
       sideWayChance: 0
       generalObstacleChance: 0
       forwardTile:
-        tilePrefab: {fileID: 0}
+        prefabs: []
         obstacleChance: 0
         obstacles: []
       forwardSidewaysTile:
-        tilePrefab: {fileID: 0}
+        prefabs: []
         obstacleChance: 0
         obstacles: []
       leftTile:
-        tilePrefab: {fileID: 0}
+        prefabs: []
         obstacleChance: 0
         obstacles: []
       rightTile:
-        tilePrefab: {fileID: 0}
+        prefabs: []
         obstacleChance: 0
         obstacles: []
     direction: 0
@@ -610,19 +614,19 @@ MonoBehaviour:
       sideWayChance: 0
       generalObstacleChance: 0
       forwardTile:
-        tilePrefab: {fileID: 0}
+        prefabs: []
         obstacleChance: 0
         obstacles: []
       forwardSidewaysTile:
-        tilePrefab: {fileID: 0}
+        prefabs: []
         obstacleChance: 0
         obstacles: []
       leftTile:
-        tilePrefab: {fileID: 0}
+        prefabs: []
         obstacleChance: 0
         obstacles: []
       rightTile:
-        tilePrefab: {fileID: 0}
+        prefabs: []
         obstacleChance: 0
         obstacles: []
     direction: 0
@@ -1514,7 +1518,7 @@ Transform:
   m_GameObject: {fileID: 365049463}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 385.44888, y: 234.09993, z: -25.92245}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2159,6 +2163,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 167900229}
     m_Modifications:
+    - target: {fileID: 2602982842464576841, guid: 313a8403fee35ca4caefbc1f6aa7cfe4,
+        type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3518108505477228572, guid: 313a8403fee35ca4caefbc1f6aa7cfe4,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3518108505477228572, guid: 313a8403fee35ca4caefbc1f6aa7cfe4,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3518108505477228572, guid: 313a8403fee35ca4caefbc1f6aa7cfe4,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3518108505477228572, guid: 313a8403fee35ca4caefbc1f6aa7cfe4,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3518108505477228572, guid: 313a8403fee35ca4caefbc1f6aa7cfe4,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3518108505477228572, guid: 313a8403fee35ca4caefbc1f6aa7cfe4,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -25
+      objectReference: {fileID: 0}
     - target: {fileID: 4224374093068668254, guid: 313a8403fee35ca4caefbc1f6aa7cfe4,
         type: 3}
       propertyPath: m_Name
@@ -2197,7 +2236,7 @@ PrefabInstance:
     - target: {fileID: 4583773132934778328, guid: 313a8403fee35ca4caefbc1f6aa7cfe4,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 200
+      value: 293.582
       objectReference: {fileID: 0}
     - target: {fileID: 4583773132934778328, guid: 313a8403fee35ca4caefbc1f6aa7cfe4,
         type: 3}
@@ -2860,7 +2899,19 @@ MonoBehaviour:
       m_Calls: []
   OnTimerReset:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1328690364}
+        m_TargetAssemblyTypeName: UITimer, Assembly-CSharp
+        m_MethodName: PingTimer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnTimerUpdate:
     m_PersistentCalls:
       m_Calls:
@@ -2944,6 +2995,9 @@ MonoBehaviour:
   pointer: {fileID: 7391449}
   maxTime: 30
   _currentTime: 0
+  uiEffectObjects:
+  - {fileID: 867144005}
+  - {fileID: 624816856}
 --- !u!1 &1366917414
 GameObject:
   m_ObjectHideFlags: 0
@@ -3886,7 +3940,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 2.6118164}
+  m_AnchoredPosition: {x: 0, y: 2.6116333}
   m_SizeDelta: {x: 0, y: 137.189}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2124470586

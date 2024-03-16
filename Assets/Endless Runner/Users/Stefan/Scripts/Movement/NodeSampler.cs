@@ -5,13 +5,38 @@ using UnityEngine;
 
 public class NodeSampler : MonoBehaviour
 {
+    const float LANE_SIZE = 1.8f;
+
     [SerializeField]
     protected Vector3 offset;
 
-    private Queue<WorldNode> nodeQueue = new();
+    public Vector3 CurrentLanePosition
+    {
+        get; private set;
+    }
+    
 
-    private Queue<Vector3> path = new ( );
+    int m_currentLane = 0;
 
+    public int CurrentLane
+    {
+        get
+        {
+            return m_currentLane;
+        }
+        private set
+        {
+            if ( value == m_currentLane )
+                return;
+            m_currentLane = value;
+
+            OnCurrentLaneSwitched ( );
+        }
+    }
+
+    //Private Variables
+
+    #region Nodes Variables
     private WorldNode m_currentNode;
 
     private WorldNode m_nextNode;
@@ -52,6 +77,12 @@ public class NodeSampler : MonoBehaviour
         }
     }
 
+    #endregion
+
+
+    //Logic
+
+    #region Node Movement
 
     public void SetCurrentNode(WorldNode node )
     {
@@ -76,4 +107,28 @@ public class NodeSampler : MonoBehaviour
     {
 
     }
+    #endregion
+
+    #region Lane Movement
+    public void MoveToLaneRight ( )
+    {
+        if(CurrentLane < 1 )
+        {
+            CurrentLane++;
+        }
+    }
+
+    public void MoveToLaneLeft ( )
+    {
+        if(CurrentLane > -1 )
+        {
+            CurrentLane -- ;
+        }
+    }
+    protected virtual void OnCurrentLaneSwitched ( )
+    {
+        CurrentLanePosition = new (LANE_SIZE * CurrentLane, 0, 0);
+    }
+
+    #endregion
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 907bd7fe4729a4741ba1434b111aec07, type: 3}
   m_Name: Manhole Obstacle
   m_EditorClassIdentifier: 
-  chanceToSpawn: 80
+  chanceToSpawn: -5
   minMaxSpawnAmount: {x: 1, y: 1}
   obstaclePrefabs:
   - {fileID: 6274585363669531582, guid: 5d1e526118a64104eb89ea5bb750cd15, type: 3}

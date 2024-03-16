@@ -35,7 +35,7 @@ public class ChunkManager : MonoBehaviour
         {
             Vector3 rotation = Vector3.up * ( WorldGenerator.AngleFromDirection (newNode.direction) + turnAngle );
 
-            spawned = Instantiate (tile.tilePrefab, newNode.position, Quaternion.identity);
+            spawned = Instantiate (tile.prefabs.Random(), newNode.position, Quaternion.identity);
             spawned.transform.localEulerAngles = rotation;
         }
 
