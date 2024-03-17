@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum GameState
@@ -10,7 +8,6 @@ public enum GameState
     GAME_OVER,
     LOADING,
 }
-
 
 public class GameManager : MonoBehaviour
 {
@@ -34,7 +31,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void OnGameStateChanged (GameState state)
+    private void OnGameStateChanged ( GameState state )
     {
         Debug.Log ($"Game State : {state}");
     }

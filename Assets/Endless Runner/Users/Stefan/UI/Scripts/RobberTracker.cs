@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class RobberTracker : MonoBehaviour
@@ -12,13 +9,12 @@ public class RobberTracker : MonoBehaviour
 
     public Transform handCuffs;
 
-    public void OnRobberDied( )
+    public void OnRobberDied ( )
     {
         robberAmount++;
 
         textElement.text = robberAmount.ToString ( );
 
         Coms.UIPulseEffect.ApplyEffect (handCuffs, textElement.transform);
-
     }
 }

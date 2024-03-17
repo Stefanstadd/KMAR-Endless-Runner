@@ -1,21 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu (fileName = "Tree Obstacle", menuName = "Runner/Obstacles/Tree Obstacles")]
 public class TreeObstacle : ObstacleObject
 {
-    public override IEnumerable<GameObject> GenerateObstacle (WorldNode node)
+    public override ObstacleData GenerateObstacle ( WorldNode node )
     {
-        for ( int i = 0; i < Random.Range (minMaxSpawnAmount.x, minMaxSpawnAmount.y); i++ )
+        int lane = Random.Range (-1, 2);
+
+        Vector3 checkPos = new Vector3 (lane * LaneMovement.LANE_SIZE, 10, 0) + node.position;
+
+        if ( Physics.Raycast (checkPos, Vector3.down, out RaycastHit hit) )
         {
-            Vector3 checkPos = new Vector3(Random.Range(-1f,1f) * WorldGenerator.TILE_DIMENSION, 10, Random.Range (-1f, 1f) * WorldGenerator.TILE_DIMENSION) + node.position;
-
-            if ( Physics.Raycast (checkPos, Vector3.down, out RaycastHit hit) )
+            return new ObstacleData
             {
-                yield return Instantiate (RandomPrefab, hit.point, Random.rotation);
-
-            }
+                gameObject = Instantiate (RandomPrefab, hit.point, Random.rotation),
+                leftLaneState = lane == -1 ? obstacleLaneState : LaneState.FREE,
+                middleLaneState = lane == 0 ? obstacleLaneState : LaneState.FREE,
+                rightLaneState = lane == 1 ? obstacleLaneState : LaneState.FREE,
+            };
         }
+
+        return ObstacleData.NullObstacLe;
     }
 }

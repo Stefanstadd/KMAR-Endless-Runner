@@ -1,12 +1,15 @@
 using UnityEngine;
 
-[System.Serializable] 
+[System.Serializable]
 public class WorldNode
 {
     public Vector3 position;
     public Biome biome;
     public Direction direction;
     public TileType type;
+
+    //Lane States
+    public LaneState leftLane, middleLane, rightLane;
 
     public WorldNode next;
 
@@ -90,7 +93,7 @@ public class WorldNode
 
     public static bool PositionInNode ( WorldNode node, Vector3 position )
     {
-        return PositionInNode(node,position, WorldGenerator.TILE_DIMENSION / 2);
+        return PositionInNode (node, position, WorldGenerator.TILE_DIMENSION / 2);
     }
 
     public static bool PositionInNode ( WorldNode node, Vector3 position, float radius )

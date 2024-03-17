@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87aa9cf6b45d193418fcb4b3741af748, type: 3}
   m_Name: City Cars
   m_EditorClassIdentifier: 
-  chanceToSpawn: 80
-  minMaxSpawnAmount: {x: 1, y: 1}
   obstaclePrefabs:
   - {fileID: 3715951340220359648, guid: 031dc67f474c55c468c29a929c7cfc99, type: 3}
+  - {fileID: 3715951340220359648, guid: e82c560c2f0c53d42a3ef5361e3c1236, type: 3}
+  obstacleLaneState: 1
   streetLength: 10
-  outerSpawnPosition: 1.5
+  spawnOffset: -0.4
   baseYPos: 0.53

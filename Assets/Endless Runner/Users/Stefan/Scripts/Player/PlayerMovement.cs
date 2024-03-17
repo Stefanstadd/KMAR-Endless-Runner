@@ -1,20 +1,22 @@
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PlayerMovement : NodeSampler
+public class PlayerMovement : LaneMovement
 {
     public Transform playerBody;
 
     public float maxHorizontalMovement;
 
-    [Header("Movement")]
+    [Header ("References")]
+    public Animator animator;
+
+    [Header ("Movement")]
     public float forwardMovementSpeed;
+
     public float forwardMaxSpeed;
 
-    public float sidewaysSpeed;
-    public float sidewaysAcceleration;
+    public float laneSmoothSpeed = 0.1f;
 
     public float movementAcceleration, movementDeacceleration;
 
@@ -27,15 +29,19 @@ public class PlayerMovement : NodeSampler
 
     [Header ("Obstacles")]
     public float stumbleTime = 0.3f;
+
     public float stumbleSpeed = 2f;
 
-    float stumbleTimer;
+    private float stumbleTimer;
 
-    Vector3 rotationVelocity;
+    private Vector3 rotationVelocity;
 
-    public float CurrentMovementSpeed{ get; private set; }
+    public float CurrentMovementSpeed
+    {
+        get; private set;
+    }
 
-    float forAccVelocity, forDeaccVelocity, sideAccVelocity;
+    private float forAccVelocity, forDeaccVelocity, sideAccVelocity;
 
     public GameObject gameOverScreen;
 
@@ -45,15 +51,12 @@ public class PlayerMovement : NodeSampler
 
     [Header ("Debug")]
     public TextMeshProUGUI speedText;
-    private bool sideWays;
 
     private bool isJumping;
 
     private float currentJumpTimer;
 
-    float xInput;
-
-    float horizontalMovement;
+    private Vector3 laneVelocity;
 
     private void Start ( )
     {
@@ -63,26 +66,37 @@ public class PlayerMovement : NodeSampler
 
     protected void Update ( )
     {
-
         if ( CurrentNode == null || NextNode == null )
             return;
 
-        xInput = Mathf.SmoothDamp(xInput,Input.GetAxis ("Horizontal"),ref sideAccVelocity, sidewaysAcceleration );
+        //Check for input to switch lanes
 
-        sideWays = Mathf.Abs(xInput) > 0.1f;
+        if ( Input.GetButtonDown ("Horizontal") )
+        {
+            float input = Input.GetAxisRaw ("Horizontal");
+
+            if ( input < 0 ) // Move left
+            {
+                MoveToLaneLeft ( );
+            }
+            else if ( input > 0 ) // move right
+            {
+                MoveToLaneRight ( );
+            }
+        }
+
+        float possibleSpeed = stumbleTimer > 0 ? stumbleSpeed : forwardMaxSpeed;
+
+        float targetSpeed = Input.GetAxisRaw ("Vertical") > 0 ? possibleSpeed : 0;
 
         stumbleTimer -= Time.deltaTime;
-        if(stumbleTimer > 0)
+        if ( stumbleTimer > 0 )
         {
-            CurrentMovementSpeed = Mathf.SmoothDamp (CurrentMovementSpeed, stumbleSpeed, ref forDeaccVelocity, movementDeacceleration);
-        }
-        if (sideWays)
-        {
-            CurrentMovementSpeed = Mathf.SmoothDamp (CurrentMovementSpeed, forwardMovementSpeed, ref forDeaccVelocity, movementDeacceleration);
+            CurrentMovementSpeed = Mathf.SmoothDamp (CurrentMovementSpeed, targetSpeed, ref forDeaccVelocity, movementDeacceleration);
         }
         else
         {
-            CurrentMovementSpeed = Mathf.SmoothDamp (CurrentMovementSpeed, forwardMaxSpeed, ref forAccVelocity, movementAcceleration);
+            CurrentMovementSpeed = Mathf.SmoothDamp (CurrentMovementSpeed, targetSpeed, ref forAccVelocity, movementAcceleration);
         }
 
         //Calculate Jump
@@ -110,7 +124,7 @@ public class PlayerMovement : NodeSampler
 
                 progress = Mathf.Clamp01 (progress);
 
-                float sin = Mathf.Sin(progress * Mathf.PI * 2 - Mathf.PI / 2);
+                float sin = Mathf.Sin (progress * Mathf.PI * 2 - Mathf.PI / 2);
 
                 float jumpLerp = Mathf.InverseLerp (-1, 1, sin);
 
@@ -122,17 +136,13 @@ public class PlayerMovement : NodeSampler
                 jump = 0;
             }
         }
-            
-        //Apply horizontal movement
 
-        horizontalMovement += xInput * sidewaysSpeed * Time.deltaTime;
+        animator.SetBool ("IsJumping", isJumping);
 
-        horizontalMovement = Mathf.Clamp (horizontalMovement, -maxHorizontalMovement, maxHorizontalMovement);
-
-        Vector3 bodyPos = new (horizontalMovement, jump, 0);
+        Vector3 bodyPos = Vector3.SmoothDamp (playerBody.localPosition, CurrentLanePosition, ref laneVelocity, laneSmoothSpeed);
+        bodyPos.y = jump;
 
         playerBody.localPosition = bodyPos;
-
 
         // Apply forward movement
 
@@ -142,9 +152,9 @@ public class PlayerMovement : NodeSampler
 
         step = Mathf.Clamp (step, 0, dst);
 
-        transform.position = Vector3.Lerp(transform.position, NextNode.position + offset, (step + float.Epsilon) / dst);
+        transform.position = Vector3.Lerp (transform.position, NextNode.position + offset, ( step + float.Epsilon ) / dst);
 
-        if(dst < 0.1f )
+        if ( dst < 0.1f )
         {
             MoveToNextNode ( );
         }
@@ -156,19 +166,18 @@ public class PlayerMovement : NodeSampler
         transform.forward = Vector3.SmoothDamp (transform.forward, direction, ref rotationVelocity, rotationSpeed);
 
         speedText.text = $"{CurrentMovementSpeed} m/s";
-
     }
 
     public void Stumble ( )
     {
         stumbleTimer = stumbleTime;
     }
+
     public void Die ( )
     {
         isDead = true;
         OnPlayerDied.Invoke ( );
 
         gameOverScreen.SetActive (true);
-
     }
 }

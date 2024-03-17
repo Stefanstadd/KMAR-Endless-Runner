@@ -11,12 +11,16 @@ public class TerrainGenerator : MonoBehaviour
 
     [Header ("Chunk Data")]
     public float generateDistance;
+
     public float renderDistance = 40;
 
     public int planeSize = 30;
     public int vertexDensity = 16;
 
     public GameObject chunkPrefab;
+    public GameObject tree;
+    public int treesPerChunk = 3;
+    public float minDstToRoad = 20;
     public Transform loader;
 
     public int neighbourCheckAmount = 1;
@@ -55,7 +59,7 @@ public class TerrainGenerator : MonoBehaviour
         CheckForRenderChunks ( );
     }
 
-    void CheckForGenerateChunks ( )
+    private void CheckForGenerateChunks ( )
     {
         foreach ( var chunk in openChunks )
         {
@@ -89,7 +93,7 @@ public class TerrainGenerator : MonoBehaviour
         toRemove.Clear ( );
     }
 
-    void CheckForRenderChunks ( )
+    private void CheckForRenderChunks ( )
     {
         List<Vector3> keysToRemove = new ( );
 
@@ -161,8 +165,36 @@ public class TerrainGenerator : MonoBehaviour
         obj.transform.name = planeCoord.ToString ( );
 
         obj.GetComponent<MeshFilter> ( ).mesh = mesh;
+        obj.GetComponent<MeshCollider> ( ).sharedMesh = mesh;
+
+        SpawnTrees (obj);
 
         activePlanes.Add (planeCoord, obj.transform);
+    }
+
+    private void SpawnTrees ( GameObject terrain )
+    {
+        for ( int i = 0; i < treesPerChunk; i++ )
+        {
+            Vector3 position = new Vector3
+            {
+                x = Random.Range (-planeSize, planeSize),
+                y = 100,
+                z = Random.Range (-planeSize, planeSize),
+            };
+
+            position += terrain.transform.position;
+
+            if ( Mathf.Abs (position.x) < minDstToRoad )
+                continue;
+
+            if ( Physics.Raycast (position, Vector3.down, out RaycastHit hit) )
+            {
+                Transform tree = Instantiate (this.tree, hit.point, Quaternion.identity, terrain.transform).transform;
+
+                tree.up = hit.normal;
+            }
+        }
     }
 
     public float GenerateHeight ( Vector3 vertexPosition, Vector3 chunk )

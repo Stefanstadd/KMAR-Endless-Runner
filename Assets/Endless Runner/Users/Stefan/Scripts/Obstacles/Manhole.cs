@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Timeline;
 using UnityEngine;
 
 public class Manhole : MonoBehaviour, IObstacle
@@ -9,7 +6,7 @@ public class Manhole : MonoBehaviour, IObstacle
 
     public bool isDefect;
 
-    bool triggered, exploded;
+    private bool triggered, exploded;
 
     public Transform cover;
 
@@ -28,7 +25,7 @@ public class Manhole : MonoBehaviour, IObstacle
 
         float dst = Vector3.Distance (Coms.PlayerMovement.playerBody.position, transform.position);
 
-        if (!triggered && dst < triggerRange )
+        if ( !triggered && dst < triggerRange )
         {
             //TODO: play particle]
             triggerEffect.Play ( );
@@ -37,20 +34,18 @@ public class Manhole : MonoBehaviour, IObstacle
             Debug.Log ("Triggered Manhole");
         }
 
-        if (exploded == false && triggered && dst < explodeRange )
+        if ( exploded == false && triggered && dst < explodeRange )
         {
             Explode ( );
 
             //TODO: Play Particle
             explodeEffect.Play ( );
 
-
             Destroy (cover.gameObject);
         }
-
     }
 
-    void Explode ( )
+    private void Explode ( )
     {
         exploded = true;
         Destroy (gameObject, 2F);

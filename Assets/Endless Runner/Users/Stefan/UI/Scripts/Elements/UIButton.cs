@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
+using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public enum ButtonStyle
 {
@@ -13,6 +10,7 @@ public enum ButtonStyle
     IconRight,
     IconOnly,
 }
+
 public enum ButtonTextAlignment
 {
     Left,
@@ -23,13 +21,14 @@ public enum ButtonTextAlignment
 public class UIButton : UISelectable
 {
     [SerializeField]
-    TextMeshProUGUI m_textField;
+    private TextMeshProUGUI m_textField;
 
     public TextMeshProUGUI TextField
     {
         get
         {
-            if (m_textField == null) m_textField = transform.GetComponent<TextMeshProUGUI>();
+            if ( m_textField == null )
+                m_textField = transform.GetComponent<TextMeshProUGUI> ( );
             return m_textField;
         }
         set
@@ -39,13 +38,14 @@ public class UIButton : UISelectable
     }
 
     [SerializeField]
-    Image m_background;
+    private Image m_background;
 
     public Image Background
     {
         get
         {
-            if(m_background == null) m_background = transform.GetComponentInChildren<Image>();
+            if ( m_background == null )
+                m_background = transform.GetComponentInChildren<Image> ( );
             return m_background;
         }
         set
@@ -55,22 +55,21 @@ public class UIButton : UISelectable
     }
 
     [SerializeField]
-    ColorBlock m_colorBlock;
+    private ColorBlock m_colorBlock;
 
     [SerializeField]
-    Vector3 hoveredScale = Vector3.one;
-
+    private Vector3 hoveredScale = Vector3.one;
 
     [SerializeField]
-    float scaleSmoothTime = 0.2f;
+    private float scaleSmoothTime = 0.2f;
+
     public Vector3 defaultScale = Vector3.one;
 
-    Vector3 scaleVelocity;
-    float maskVelocity;
+    private Vector3 scaleVelocity;
+    private float maskVelocity;
 
     [SerializeField]
-    Image mask;
-
+    private Image mask;
 
     [SerializeField]
     private ButtonStyle m_theme;
@@ -83,10 +82,11 @@ public class UIButton : UISelectable
         }
         set
         {
-            if (value == m_theme) return;
+            if ( value == m_theme )
+                return;
             m_theme = value;
 
-            OnThemeSwitch();
+            OnThemeSwitch ( );
         }
     }
 
@@ -102,7 +102,6 @@ public class UIButton : UISelectable
         }
     }
 
-
     public string Text
     {
         get
@@ -111,11 +110,12 @@ public class UIButton : UISelectable
         }
         set
         {
-            if (value == TextField.text) return;
+            if ( value == TextField.text )
+                return;
 
             TextField.text = value;
 
-            OnTextUpdate();
+            OnTextUpdate ( );
         }
     }
 
@@ -130,113 +130,121 @@ public class UIButton : UISelectable
         }
         set
         {
-            if (value == m_textAlignment) return;
+            if ( value == m_textAlignment )
+                return;
             m_textAlignment = value;
 
-            OnTextAlignmentChanged();
+            OnTextAlignmentChanged ( );
         }
     }
 
     public UnityEvent OnClickEvent;
 
-    protected override void Start()
+    protected override void Start ( )
     {
-        base.Start();
+        base.Start ( );
 
         defaultScale = transform.localScale;
     }
-    protected override void OnDisable()
+
+    protected override void OnDisable ( )
     {
-        base.OnEnable();
+        base.OnEnable ( );
     }
 
-    public override void OnClick()
+    public override void OnClick ( )
     {
-        OnClickEvent.Invoke();
+        OnClickEvent.Invoke ( );
     }
 
-    protected override void Awake()
+    protected override void Awake ( )
     {
         m_colorBlock.onColorChangedEditor += SetColor;
-
     }
 
-    private void Update()
+    private void Update ( )
     {
-        SetColor();
+        SetColor ( );
 
         Vector3 targetScale = Hovered ? hoveredScale : defaultScale;
-        transform.localScale = Vector3.SmoothDamp(transform.localScale, targetScale, ref scaleVelocity, scaleSmoothTime);
+        transform.localScale = Vector3.SmoothDamp (transform.localScale, targetScale, ref scaleVelocity, scaleSmoothTime);
 
         float targetMask = Hovered ? 1 : 0;
 
         mask.fillAmount = Mathf.SmoothDamp (mask.fillAmount, targetMask, ref maskVelocity, scaleSmoothTime);
     }
 
-    void SetColor()
+    private void SetColor ( )
     {
-        SetColor(Colors.GetColor(this));
+        SetColor (Colors.GetColor (this));
     }
-    void SetColor(Color color)
+
+    private void SetColor ( Color color )
     {
-        if(TextField)
+        if ( TextField )
             TextField.color = color;
-        if (Background)
+        if ( Background )
             Background.color = color;
     }
 
-    private void OnTextUpdate()
+    private void OnTextUpdate ( )
     {
         TextField.text = Text;
     }
 
-    private void OnThemeSwitch()
+    private void OnThemeSwitch ( )
     {
-        switch (Theme)
+        switch ( Theme )
         {
             case ButtonStyle.Default:
 
                 break;
+
             case ButtonStyle.IconLeft:
 
                 break;
+
             case ButtonStyle.IconRight:
 
                 break;
+
             case ButtonStyle.IconOnly:
 
                 break;
+
             default:
                 break;
         }
 
-        static void SwitchSiblingIndex(Transform shouldbehigh, Transform shouldbelow)
+        static void SwitchSiblingIndex ( Transform shouldbehigh, Transform shouldbelow )
         {
-            shouldbehigh.SetAsFirstSibling();
-            shouldbelow.SetAsLastSibling();
+            shouldbehigh.SetAsFirstSibling ( );
+            shouldbelow.SetAsLastSibling ( );
         }
     }
 
-
-    private void OnTextAlignmentChanged()
+    private void OnTextAlignmentChanged ( )
     {
-        switch (TextAlignment)
+        switch ( TextAlignment )
         {
             case ButtonTextAlignment.Left:
                 TextField.alignment = TextAlignmentOptions.Left;
                 break;
+
             case ButtonTextAlignment.Center:
                 TextField.alignment = TextAlignmentOptions.Center;
                 break;
+
             case ButtonTextAlignment.Right:
                 TextField.alignment = TextAlignmentOptions.Right;
                 break;
+
             default:
                 break;
         }
     }
 
-    public new void Reset()
+    public new void Reset ( )
     {
         Text = "Button";
         Background = null;

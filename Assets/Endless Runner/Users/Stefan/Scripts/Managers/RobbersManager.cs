@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class RobbersManager : MonoBehaviour
 {
-
     public List<Robber> robbers = new ( );
     public int maxActiveRobbers;
     public int robbersStartAmount;
@@ -17,7 +15,7 @@ public class RobbersManager : MonoBehaviour
 
     public GameObject robberPrefab;
 
-    float spawnTimer;
+    private float spawnTimer;
 
     public UnityEvent onRobberCaught;
 
@@ -25,7 +23,8 @@ public class RobbersManager : MonoBehaviour
     {
         //StartGame ( );
     }
-    void StartGame ( )
+
+    private void StartGame ( )
     {
         for ( int i = 0; i < robbersStartAmount; i++ )
         {
@@ -35,24 +34,23 @@ public class RobbersManager : MonoBehaviour
 
     private void Update ( )
     {
-        if(spawnTimer < robberSpawnDelay )
+        if ( spawnTimer < robberSpawnDelay )
         {
             spawnTimer += Time.deltaTime;
         }
-        else if(activeRobbers < maxActiveRobbers)
+        else if ( activeRobbers < maxActiveRobbers )
         {
             spawnTimer = 0;
             SpawnRobber ( );
         }
     }
 
-    void SpawnRobber ( )
+    private void SpawnRobber ( )
     {
         activeRobbers++;
         Debug.Log ("Robber has spawned!");
 
         WorldNode startnode = WorldNode.NodeAtIndex (Coms.PlayerMovement.CurrentNode, nodesBeforePlayer);
-
 
         var robber = Instantiate (robberPrefab, startnode.position, Quaternion.identity).GetComponent<Robber> ( );
 
@@ -64,12 +62,12 @@ public class RobbersManager : MonoBehaviour
         robbers.Add (robber);
     }
 
-    Vector3 CalculateSpawnPos ( )
+    private Vector3 CalculateSpawnPos ( )
     {
         return WorldNode.NodeContainingPosition (Coms.PlayerMovement.CurrentNode, Coms.PlayerMovement.transform.position).position;
     }
 
-    public void CatchRobber(Robber robber )
+    public void CatchRobber ( Robber robber )
     {
         robbers.Remove (robber);
         Destroy (robber.gameObject);
@@ -83,7 +81,4 @@ public class RobbersManager : MonoBehaviour
         onRobberCaught.Invoke ( );
         Debug.Log ("Robber caught!");
     }
-
-
-
 }

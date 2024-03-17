@@ -1,4 +1,3 @@
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -298,18 +297,19 @@ public class WorldGenerator : MonoBehaviour
         if ( head == null )
             return;
 
-
-        for(WorldNode cur = head; cur != null; cur = cur.next )
+        for ( WorldNode cur = head; cur != null; cur = cur.next )
         {
             Gizmos.color = cur.biome.biomeColor;
 
-            if(cur.next != null)
+            if ( cur.next != null )
                 Gizmos.DrawLine (cur.position, cur.next.position);
             Gizmos.DrawSphere (cur.position, gizmoSize);
         }
     }
 
-    #endregion 
+    #endregion Gizmos
+
+
 
     /// <summary>
     /// Converts a position in worldspace to the coordinate of a tile

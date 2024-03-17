@@ -35,7 +35,7 @@ public class ChunkManager : MonoBehaviour
         {
             Vector3 rotation = Vector3.up * ( WorldGenerator.AngleFromDirection (newNode.direction) + turnAngle );
 
-            spawned = Instantiate (tile.prefabs.Random(), newNode.position, Quaternion.identity);
+            spawned = Instantiate (tile.prefabs.Random ( ), newNode.position, Quaternion.identity);
             spawned.transform.localEulerAngles = rotation;
         }
 
@@ -43,17 +43,17 @@ public class ChunkManager : MonoBehaviour
 
         if ( r < newNode.biome.generalObstacleChance && r < tile.obstacleChance )
         {
-            foreach ( ObstacleObject obstacleGenerator in tile.obstacles )
-            {
-                float r2 = Random.Range (0, 100);
+            ObstacleObject obstacleGenerator = tile.obstacles.Random ( );
 
-                if(r2 < obstacleGenerator.chanceToSpawn )
-                {
-                    foreach ( GameObject spawnedObstacle in obstacleGenerator.GenerateObstacle (newNode))
-                    {
-                        spawnedObstacle.transform.SetParent (spawned.transform);
-                    }
-                }
+            ObstacleData spawnedObstacle = obstacleGenerator.GenerateObstacle (newNode);
+
+            if ( !spawnedObstacle.IsNull )
+            {
+                newNode.leftLane = spawnedObstacle.leftLaneState;
+                newNode.middleLane = spawnedObstacle.middleLaneState;
+                newNode.rightLane = spawnedObstacle.rightLaneState;
+
+                spawnedObstacle.gameObject.transform.SetParent (spawned.transform);
             }
         }
 

@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84ccf33346b76947ad6da0832829e46, type: 3}
   m_Name: Woods Tree
   m_EditorClassIdentifier: 
-  chanceToSpawn: 75
-  minMaxSpawnAmount: {x: 1, y: 4}
   obstaclePrefabs:
   - {fileID: 2508567432023879302, guid: 58229ffe1be78d84d8d0e09dbd4b7a4a, type: 3}
+  obstacleLaneState: 1

@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class DeathScreen : MonoBehaviour
 {
     [SerializeField]
-    TextMeshProUGUI loseReason, distance, robbersCaught;
+    private TextMeshProUGUI loseReason, distance, robbersCaught;
 
-    public void SetDeathScreen (string deathReason, double distance, int robbersCaught )
+    public void SetDeathScreen ( string deathReason, double distance, int robbersCaught )
     {
         loseReason.text = deathReason;
 
@@ -17,7 +15,7 @@ public class DeathScreen : MonoBehaviour
         this.robbersCaught.text = $"Robbers Caught: {robbersCaught}";
     }
 
-    public void Enable ( bool enabled)
+    public void Enable ( bool enabled )
     {
         gameObject.SetActive (enabled);
     }

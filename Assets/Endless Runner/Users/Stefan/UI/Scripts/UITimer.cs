@@ -1,26 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UITimer : MonoBehaviour
 {
     [SerializeField]
-    Image fill;
+    private Image fill;
 
     [SerializeField]
-    Transform pointer;
+    private Transform pointer;
 
     [SerializeField]
-    float maxTime;
+    private float maxTime;
 
     [SerializeField]
-    float _currentTime;
+    private float _currentTime;
 
     [SerializeField]
-    Transform[] uiEffectObjects; 
+    private Transform[] uiEffectObjects;
 
-    float CurrentTime
+    private float CurrentTime
     {
         get
         {
@@ -37,7 +35,7 @@ public class UITimer : MonoBehaviour
         }
     }
 
-    void OnCurrentTimeChanged ( )
+    private void OnCurrentTimeChanged ( )
     {
         float progress = Mathf.InverseLerp (0, maxTime, CurrentTime);
 
@@ -48,17 +46,18 @@ public class UITimer : MonoBehaviour
         pointer.localEulerAngles = angles;
     }
 
-    public void SetMaxTime(float max )
+    public void SetMaxTime ( float max )
     {
         maxTime = max;
-        OnCurrentTimeChanged( );
+        OnCurrentTimeChanged ( );
     }
 
-    public void SetTime(float time )
+    public void SetTime ( float time )
     {
         CurrentTime = time;
     }
-    public void AddTime(float addTime )
+
+    public void AddTime ( float addTime )
     {
         CurrentTime += addTime;
     }

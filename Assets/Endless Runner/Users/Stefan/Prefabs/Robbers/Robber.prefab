@@ -185,11 +185,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: {x: 0, y: 0, z: 0}
   movementSpeed: 6.5
-  horizontalSmoothTime: 0.7
+  movementSmoothTime: 0.15
+  jumpTime: 0.8
+  jumpHeight: 2
   rotationSpeed: 0.25
-  horizontalMax: 2.25
-  moveChangeMinMax: {x: 1, y: 5}
   body: {fileID: 852087458461864435}
+  minDstToCheckForObstacle: 7
+  minDstToJumpObstacle: 1
 --- !u!1 &8307762198535007109
 GameObject:
   m_ObjectHideFlags: 0

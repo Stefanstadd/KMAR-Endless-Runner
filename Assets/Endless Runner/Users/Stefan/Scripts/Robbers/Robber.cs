@@ -1,31 +1,28 @@
 using UnityEngine;
 
-public class Robber : NodeSampler
+public class Robber : LaneMovement
 {
     public float movementSpeed;
-    public float horizontalSmoothTime;
+    public float movementSmoothTime;
+
+    public float jumpTime = 0.8f;
+    public float jumpHeight = 1.5f;
+
     public float rotationSpeed;
-    public float horizontalMax;
-
-    public Vector2 moveChangeMinMax;
-
     public Transform body;
 
-    float timeToChangeMove;
-    float moveChangeTimer;
+    public float minDstToCheckForObstacle = 5;
+    public float minDstToJumpObstacle = 2;
 
-    float targetHorizontal;
-    float horizontal;
+    private Vector3 rotationVelocity;
+    private Vector3 movementVelocity;
 
-    float horVelocity;
+    //Jumping variables
+    private bool shouldJump;
 
-    Vector3 rotationVelocity;
+    private bool isJumping;
 
-    // Start is called before the first frame update
-    void Start ( )
-    {
-
-    }
+    private float currentJumpTimer;
 
     // Update is called once per frame
     protected void Update ( )
@@ -33,26 +30,61 @@ public class Robber : NodeSampler
         if ( CurrentNode == null || NextNode == null )
             return;
 
-        moveChangeTimer += Time.deltaTime;
+        // Handle Horizontal Movement
 
-        if ( moveChangeTimer > timeToChangeMove )
+        float nextNodeDst = Vector3.Distance (transform.position, NextNode.position);
+
+        if ( nextNodeDst < minDstToCheckForObstacle )
         {
-            moveChangeTimer = 0;
-            timeToChangeMove = Random.Range (moveChangeMinMax.x, moveChangeMinMax.y);
-
-            targetHorizontal = Random.Range (-horizontalMax, horizontalMax);
+            HandleLaneSwitching ( );
         }
 
-        // Calculate horizontal movement
+        //Calculate jumping
 
-        
-        horizontal = Mathf.SmoothDamp(horizontal,targetHorizontal, ref horVelocity, horizontalSmoothTime);
+        //Calculate Jump
 
-        //apply horizontal movement
+        float jump = 0;
 
-        Vector3 bodyPos = new (horizontal, 0, 0);
+        if ( !isJumping )
+        {
+            if ( shouldJump )
+            {
+                isJumping = true;
+                currentJumpTimer = 0;
+            }
+        }
 
-        body.localPosition = bodyPos;
+        if ( isJumping )
+        {
+            currentJumpTimer += Time.deltaTime;
+
+            if ( currentJumpTimer < jumpTime )
+            {
+                float progress = Mathf.InverseLerp (0, jumpTime, currentJumpTimer);
+
+                progress = Mathf.Clamp01 (progress);
+
+                float sin = Mathf.Sin (progress * Mathf.PI * 2 - Mathf.PI / 2);
+
+                float jumpLerp = Mathf.InverseLerp (-1, 1, sin);
+
+                jump = Mathf.Lerp (0, jumpHeight, jumpLerp);
+            }
+            else if ( currentJumpTimer > jumpTime )
+            {
+                isJumping = false;
+                jump = 0;
+
+                shouldJump = false;
+            }
+        }
+
+        Vector3 targetPos = Vector3.SmoothDamp (body.localPosition, CurrentLanePosition, ref movementVelocity, movementSmoothTime);
+
+        //TODO: Add jumping
+        targetPos.y = jump;
+
+        body.localPosition = targetPos;
 
         //Calculate and apply rotation
 
@@ -74,6 +106,86 @@ public class Robber : NodeSampler
         {
             MoveToNextNode ( );
         }
+    }
 
+    private void HandleLaneSwitching ( )
+    {
+        switch ( CurrentLane )
+        {
+            case -1: // Left lane case
+
+                if ( NextNode.leftLane != LaneState.FREE )
+                {
+                    if ( NextNode.leftLane == LaneState.BLOCKED ) // Move to the next lane to the right(middle lane)
+                    {
+                        MoveToLaneRight ( );
+                        break;
+                    }
+
+                    //Robber can jump over obstacle
+                    shouldJump = true;
+                }
+
+                break;
+
+            case 0: // Middle lane case
+
+                if ( NextNode.middleLane != LaneState.FREE )
+                {
+                    if ( NextNode.middleLane == LaneState.BLOCKED ) // Check if we can jump to the left or right
+                    {
+                        bool canJumpLeft = NextNode.leftLane != LaneState.BLOCKED;
+                        bool canJumpRight = NextNode.rightLane != LaneState.BLOCKED;
+
+                        if ( canJumpLeft && canJumpRight )  //we can jump to both sides so choose randomly
+                        {
+                            if ( Random.Range (0, 100) < 50 )
+                            {
+                                MoveToLaneLeft ( );
+                            }
+                            else
+                            {
+                                MoveToLaneRight ( );
+                            }
+                        }
+                        else if ( canJumpLeft )
+                        {
+                            MoveToLaneLeft ( );
+                        }
+                        else if ( canJumpRight )
+                        {
+                            MoveToLaneRight ( );
+                        }
+                        else //all lanes are blocked, something went wrong in generation
+                        {
+                            Debug.LogError ($"All lanes are blocked on node {NextNode}", gameObject);
+                        }
+                        break;
+                    }
+
+                    //Robber can jump over obstacle
+                    shouldJump = true;
+                }
+
+                break;
+
+            case 1: // Right lane case
+                if ( NextNode.rightLane != LaneState.FREE )
+                {
+                    if ( NextNode.rightLane == LaneState.BLOCKED ) // Move to the next lane to the left(middle lane)
+                    {
+                        MoveToLaneLeft ( );
+                        break;
+                    }
+
+                    //Robber can jump over obstacle
+                    shouldJump = true;
+                }
+                break;
+
+            default:
+                Debug.LogError ($"Invalid Lane: {CurrentLane}");
+                break;
+        }
     }
 }

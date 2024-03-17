@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -40,20 +38,19 @@ public class TimeManager : MonoBehaviour
     {
         if ( paused )
             return;
-        if(CurrentTime > 0)
+        if ( CurrentTime > 0 )
         {
             CurrentTime -= Time.deltaTime;
 
-            if(CurrentTime <= 0 )
+            if ( CurrentTime <= 0 )
             {
                 OnTimerReachedZero.Invoke ( );
             }
             OnTimerUpdate.Invoke (CurrentTime);
         }
-
     }
 
-    public void SetMaxTime (float maxTime)
+    public void SetMaxTime ( float maxTime )
     {
         this.maxTime = maxTime;
     }
@@ -65,7 +62,7 @@ public class TimeManager : MonoBehaviour
         OnTimerReset.Invoke ( );
     }
 
-    public void Pause (bool paused)
+    public void Pause ( bool paused )
     {
         this.paused = paused;
     }

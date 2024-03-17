@@ -1,16 +1,15 @@
 using UnityEngine;
 
-public class NodeSampleTest : NodeSampler
+public class NodeSampleTest : LaneMovement
 {
     public float movementSpeed = 5;
 
     public float rotationSpeed;
 
-    Vector3 rotVelocity;
+    private Vector3 rotVelocity;
 
-    protected  void Update ( )
+    protected void Update ( )
     {
-
         if ( CurrentNode == null || NextNode == null )
             return;
 
@@ -31,12 +30,11 @@ public class NodeSampleTest : NodeSampler
 
         step = Mathf.Clamp (step, 0f, dst);
 
-        transform.position = Vector3.Lerp (transform.position, NextNode.position + offset,( step + float.Epsilon) / dst);
-        
-        if(dst < 0.2f )
+        transform.position = Vector3.Lerp (transform.position, NextNode.position + offset, ( step + float.Epsilon ) / dst);
+
+        if ( dst < 0.2f )
         {
             MoveToNextNode ( );
         }
     }
 }
-

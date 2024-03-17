@@ -1,25 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    new Camera camera;
+    private new Camera camera;
     public PlayerMovement player;
     public Transform target;
     public float movSpeed, rotSpeed;
 
     public Vector2 fovMap;
 
-    Vector3 movVelocity;
-    Vector3 rotVelocity;
+    private Vector3 movVelocity;
+    private Vector3 rotVelocity;
 
     private void Start ( )
     {
-        camera = GetComponent<Camera> ( );   
+        camera = GetComponent<Camera> ( );
     }
+
     // Update is called once per frame
-    void Update()
+    private void Update ( )
     {
         if ( player == null || target == null )
             return;
@@ -29,6 +28,5 @@ public class PlayerCamera : MonoBehaviour
         transform.forward = Vector3.SmoothDamp (transform.forward, target.forward, ref rotVelocity, rotSpeed);
 
         camera.fieldOfView = Mathf.Lerp (fovMap.x, fovMap.y, Mathf.InverseLerp (player.forwardMovementSpeed, player.forwardMaxSpeed, player.CurrentMovementSpeed));
-
     }
 }

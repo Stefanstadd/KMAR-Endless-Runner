@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -77,12 +75,10 @@ public static class Coms
         }
     }
 
-
-
     // Private methods
-    private static T Find<T> (ref T original ) where T : Object
+    private static T Find<T> ( ref T original ) where T : Object
     {
-        if(original == null)
+        if ( original == null )
             original = Object.FindObjectOfType<T> (false);
         return original;
     }

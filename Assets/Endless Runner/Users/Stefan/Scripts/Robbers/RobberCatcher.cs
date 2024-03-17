@@ -13,7 +13,7 @@ public class RobberCatcher : MonoBehaviour
             {
                 float dst = Vector3.Distance (robber.body.transform.position, player.playerBody.position);
 
-                if(dst < catchDistance )
+                if ( dst < catchDistance )
                 {
                     Coms.RobbersManager.CatchRobber (robber);
                 }
