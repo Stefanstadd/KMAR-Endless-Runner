@@ -57,17 +57,15 @@ public class PlayerMovement : LaneMovement
     private float currentJumpTimer;
 
     private Vector3 laneVelocity;
-
-    private void Start ( )
-    {
-        CurrentMovementSpeed = forwardMovementSpeed;
-        SetCurrentNode (Coms.WorldGenerator.head);
-    }
-
     protected void Update ( )
     {
         if ( CurrentNode == null || NextNode == null )
+        {
+            SetCurrentNode (Coms.WorldGenerator.head);
             return;
+        }
+
+        Debug.Log ("is not null");
 
         //Check for input to switch lanes
 
@@ -166,6 +164,11 @@ public class PlayerMovement : LaneMovement
         transform.forward = Vector3.SmoothDamp (transform.forward, direction, ref rotationVelocity, rotationSpeed);
 
         speedText.text = $"{CurrentMovementSpeed} m/s";
+
+        if ( Input.GetKeyDown (KeyCode.K) )
+        {
+            Die ( );
+        }
     }
 
     public void Stumble ( )
