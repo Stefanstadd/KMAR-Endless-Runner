@@ -86,7 +86,6 @@ public struct LeaderBoardEntry : IEquatable<LeaderBoardEntry>, IComparable<Leade
 
 public class LeaderBoardEntryComparer : IComparer<LeaderBoardEntry>
 {
-
     readonly EntrySortMode mode;
     readonly bool reverse;
 
@@ -102,26 +101,24 @@ public class LeaderBoardEntryComparer : IComparer<LeaderBoardEntry>
         {
             return mode switch
             {
-                EntrySortMode.METERS_RAN =>x.metersRan.CompareTo (y.metersRan),
-                EntrySortMode.ROBBERS_CAUGHT =>x.robbersCaught.CompareTo (y.robbersCaught),
-                EntrySortMode.TIME_ALIVE =>x.timeAlive.CompareTo (y.timeAlive),
-                EntrySortMode.TIME_BETWEEN_CATCHES =>x.AverageTimeBetweenRobberCaught.CompareTo (y.AverageTimeBetweenRobberCaught),
-                EntrySortMode.NAME =>x.name.CompareTo (y.name),
-                _ =>x.CompareTo (y),
+                EntrySortMode.METERS_RAN => x.metersRan.CompareTo (y.metersRan),
+                EntrySortMode.ROBBERS_CAUGHT => x.robbersCaught.CompareTo (y.robbersCaught),
+                EntrySortMode.TIME_ALIVE => x.timeAlive.CompareTo (y.timeAlive),
+                EntrySortMode.TIME_BETWEEN_CATCHES => x.AverageTimeBetweenRobberCaught.CompareTo (y.AverageTimeBetweenRobberCaught),
+                EntrySortMode.NAME => x.name.CompareTo (y.name),
+                _ => x.CompareTo (y),
             };
         }
-        else
+
+        return mode switch
         {
-            return mode switch
-            {
-                EntrySortMode.METERS_RAN => y.metersRan.CompareTo (x.metersRan),
-                EntrySortMode.ROBBERS_CAUGHT => y.robbersCaught.CompareTo (x.robbersCaught),
-                EntrySortMode.TIME_ALIVE => y.timeAlive.CompareTo (x.timeAlive),
-                EntrySortMode.TIME_BETWEEN_CATCHES => y.AverageTimeBetweenRobberCaught.CompareTo (x.AverageTimeBetweenRobberCaught),
-                EntrySortMode.NAME => y.name.CompareTo (x.name),
-                _ => y.CompareTo (x),
-            };
-        }
+            EntrySortMode.METERS_RAN => y.metersRan.CompareTo (x.metersRan),
+            EntrySortMode.ROBBERS_CAUGHT => y.robbersCaught.CompareTo (x.robbersCaught),
+            EntrySortMode.TIME_ALIVE => y.timeAlive.CompareTo (x.timeAlive),
+            EntrySortMode.TIME_BETWEEN_CATCHES => y.AverageTimeBetweenRobberCaught.CompareTo (x.AverageTimeBetweenRobberCaught),
+            EntrySortMode.NAME => y.name.CompareTo (x.name),
+            _ => y.CompareTo (x),
+        };
     }
 }
 public enum EntrySortMode
