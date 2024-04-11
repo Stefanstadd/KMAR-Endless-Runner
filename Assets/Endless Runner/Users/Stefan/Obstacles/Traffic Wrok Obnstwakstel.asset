@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Traffic Wrok Obnstwakstel
   m_EditorClassIdentifier: 
   obstaclePrefabs:
-  - {fileID: 8358518862179951501, guid: 0bbce044a7c0b6042928f53a4a8749a2, type: 3}
-  - {fileID: 5364583174077006879, guid: 78270e181828d604885b88e236887e4e, type: 3}
+  - {fileID: 3557064194198112411, guid: 9f59a9cec5297b741916c0e51250f51b, type: 3}
+  - {fileID: 7617515821206553483, guid: d0362cda36f501542bb17f1223fc9f29, type: 3}
   obstacleLaneState: 2
-  yLevel: 0
+  yLevel: 0.13

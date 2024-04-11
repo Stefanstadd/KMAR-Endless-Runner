@@ -14,6 +14,8 @@ public class Robber : LaneMovement
     public float minDstToCheckForObstacle = 5;
     public float minDstToJumpObstacle = 2;
 
+    public Animator animator;
+
     private Vector3 rotationVelocity;
     private Vector3 movementVelocity;
 
@@ -51,6 +53,8 @@ public class Robber : LaneMovement
             {
                 isJumping = true;
                 currentJumpTimer = 0;
+
+                animator.SetTrigger ("Jump");
             }
         }
 
@@ -116,7 +120,7 @@ public class Robber : LaneMovement
 
                 if ( NextNode.leftLane != LaneState.FREE )
                 {
-                    if ( NextNode.leftLane == LaneState.BLOCKED ) // Move to the next lane to the right(middle lane)
+                    if ( ShouldAvoidLane(NextNode.leftLane)) // Move to the next lane to the right(middle lane)
                     {
                         MoveToLaneRight ( );
                         break;
@@ -132,10 +136,10 @@ public class Robber : LaneMovement
 
                 if ( NextNode.middleLane != LaneState.FREE )
                 {
-                    if ( NextNode.middleLane == LaneState.BLOCKED ) // Check if we can jump to the left or right
+                    if ( ShouldAvoidLane(NextNode.middleLane)) // Check if we can jump to the left or right
                     {
-                        bool canJumpLeft = NextNode.leftLane != LaneState.BLOCKED;
-                        bool canJumpRight = NextNode.rightLane != LaneState.BLOCKED;
+                        bool canJumpLeft = !ShouldAvoidLane(NextNode.leftLane);
+                        bool canJumpRight = !ShouldAvoidLane( NextNode.rightLane);
 
                         if ( canJumpLeft && canJumpRight )  //we can jump to both sides so choose randomly
                         {
@@ -172,7 +176,7 @@ public class Robber : LaneMovement
             case 1: // Right lane case
                 if ( NextNode.rightLane != LaneState.FREE )
                 {
-                    if ( NextNode.rightLane == LaneState.BLOCKED ) // Move to the next lane to the left(middle lane)
+                    if ( ShouldAvoidLane(NextNode.rightLane)) // Move to the next lane to the left(middle lane)
                     {
                         MoveToLaneLeft ( );
                         break;
@@ -187,5 +191,18 @@ public class Robber : LaneMovement
                 Debug.LogError ($"Invalid Lane: {CurrentLane}");
                 break;
         }
+    }
+
+    private bool ShouldAvoidLane(LaneState lane )
+    {
+        if ( lane == LaneState.BLOCKED )
+            return true;
+
+        if ( lane == LaneState.JUMPABLE && Random.value <= 0.5f )
+        {
+            return true;
+        }
+
+        return false;
     }
 }

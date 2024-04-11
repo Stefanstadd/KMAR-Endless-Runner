@@ -21,6 +21,9 @@ public class OptionsManager : MonoBehaviour
     private void OnEnable ( )
     {
         LoadElements ( );
+
+        isDirty = false;
+        applyButton.SetActive (false);
     }
 
     public void MarkAsDirty ( )

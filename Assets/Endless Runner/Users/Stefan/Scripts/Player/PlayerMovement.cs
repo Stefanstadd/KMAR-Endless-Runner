@@ -57,6 +57,11 @@ public class PlayerMovement : LaneMovement
     private float currentJumpTimer;
 
     private Vector3 laneVelocity;
+
+    private void Start ( )
+    {
+        CurrentMovementSpeed = forwardMovementSpeed;
+    }
     protected void Update ( )
     {
         if ( CurrentNode == null || NextNode == null )
@@ -85,7 +90,7 @@ public class PlayerMovement : LaneMovement
 
         float possibleSpeed = stumbleTimer > 0 ? stumbleSpeed : forwardMaxSpeed;
 
-        float targetSpeed = Input.GetAxisRaw ("Vertical") > 0 ? possibleSpeed : 0;
+        float targetSpeed = /*Input.GetAxisRaw ("Vertical") > 0 ? possibleSpeed : 0*/ possibleSpeed;
 
         stumbleTimer -= Time.deltaTime;
         if ( stumbleTimer > 0 )
@@ -109,6 +114,8 @@ public class PlayerMovement : LaneMovement
                 currentJumpTimer = 0;
 
                 CurrentMovementSpeed += jumpMovementBoost;
+
+                animator.SetBool ("IsJumping", true);
             }
         }
 
@@ -132,6 +139,8 @@ public class PlayerMovement : LaneMovement
             {
                 isJumping = false;
                 jump = 0;
+
+                animator.SetBool ("IsJumping", false);
             }
         }
 
@@ -175,7 +184,6 @@ public class PlayerMovement : LaneMovement
     {
         stumbleTimer = stumbleTime;
     }
-
     public void Die ( )
     {
         isDead = true;

@@ -13,9 +13,14 @@ MonoBehaviour:
   m_Name: City Cars
   m_EditorClassIdentifier: 
   obstaclePrefabs:
-  - {fileID: 3715951340220359648, guid: 031dc67f474c55c468c29a929c7cfc99, type: 3}
-  - {fileID: 3715951340220359648, guid: e82c560c2f0c53d42a3ef5361e3c1236, type: 3}
+  - {fileID: 919132149155446097, guid: 5bd9f48ca2ad1234db49762f0b511fd7, type: 3}
+  - {fileID: 919132149155446097, guid: 60b3822cb9e17f8498c42d99e651dd16, type: 3}
+  - {fileID: 919132149155446097, guid: 1e997a752e26e25489cf2bfea641deaf, type: 3}
+  - {fileID: 919132149155446097, guid: 81a4fc9a5b7b5e94bb3285aad372286d, type: 3}
+  - {fileID: 919132149155446097, guid: 38464449f67087a45be82719501e3e8e, type: 3}
+  - {fileID: 919132149155446097, guid: ca20cfcbeb604b447b9fb458a79f6e89, type: 3}
   obstacleLaneState: 1
   streetLength: 10
   spawnOffset: -0.4
-  baseYPos: 0.53
+  baseYPos: 0.12
+  scale: 0.82322
