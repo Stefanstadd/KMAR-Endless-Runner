@@ -17,4 +17,4 @@ MonoBehaviour:
   obstacleLaneState: 1
   defectiveChance: 50
   streetSize: 2.25
-  yLevel: 0
+  yLevel: 0.142

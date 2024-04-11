@@ -14,6 +14,8 @@ public class Robber : LaneMovement
     public float minDstToCheckForObstacle = 5;
     public float minDstToJumpObstacle = 2;
 
+    public float catchDst;
+
     public Animator animator;
 
     private Vector3 rotationVelocity;
@@ -26,6 +28,7 @@ public class Robber : LaneMovement
 
     private float currentJumpTimer;
 
+    bool hasHandledLaneSwitching;
     // Update is called once per frame
     protected void Update ( )
     {
@@ -36,9 +39,10 @@ public class Robber : LaneMovement
 
         float nextNodeDst = Vector3.Distance (transform.position, NextNode.position);
 
-        if ( nextNodeDst < minDstToCheckForObstacle )
+        if ( nextNodeDst < minDstToCheckForObstacle && !hasHandledLaneSwitching)
         {
             HandleLaneSwitching ( );
+            hasHandledLaneSwitching = true;
         }
 
         //Calculate jumping
@@ -85,6 +89,8 @@ public class Robber : LaneMovement
 
         Vector3 targetPos = Vector3.SmoothDamp (body.localPosition, CurrentLanePosition, ref movementVelocity, movementSmoothTime);
 
+        Debug.Log (CurrentLanePosition);
+
         //TODO: Add jumping
         targetPos.y = jump;
 
@@ -109,7 +115,10 @@ public class Robber : LaneMovement
         if ( dst < 0.1f )
         {
             MoveToNextNode ( );
+            hasHandledLaneSwitching = false;
         }
+
+        HandleCatch ( );
     }
 
     private void HandleLaneSwitching ( )
@@ -139,7 +148,7 @@ public class Robber : LaneMovement
                     if ( ShouldAvoidLane(NextNode.middleLane)) // Check if we can jump to the left or right
                     {
                         bool canJumpLeft = !ShouldAvoidLane(NextNode.leftLane);
-                        bool canJumpRight = !ShouldAvoidLane( NextNode.rightLane);
+                        bool canJumpRight = !ShouldAvoidLane(NextNode.rightLane);
 
                         if ( canJumpLeft && canJumpRight )  //we can jump to both sides so choose randomly
                         {
@@ -151,6 +160,8 @@ public class Robber : LaneMovement
                             {
                                 MoveToLaneRight ( );
                             }
+
+                            break;
                         }
                         else if ( canJumpLeft )
                         {
@@ -169,6 +180,8 @@ public class Robber : LaneMovement
 
                     //Robber can jump over obstacle
                     shouldJump = true;
+                    Debug.Log ("Should jump");
+
                 }
 
                 break;
@@ -198,11 +211,23 @@ public class Robber : LaneMovement
         if ( lane == LaneState.BLOCKED )
             return true;
 
-        if ( lane == LaneState.JUMPABLE && Random.value <= 0.5f )
+        if ( lane == LaneState.JUMPABLE && Random.value >= 0.5f )
         {
             return true;
         }
 
         return false;
+    }
+
+    void HandleCatch ( )
+    {
+        if(Vector3.Distance(Coms.PlayerMovement.playerBody.position,body.position) < catchDst || Coms.PlayerMovement.transform.position.z >= transform.position.z)
+        {
+            Catch ( );
+        }
+    }
+    public void Catch ( )
+    {
+        Coms.RobbersManager.CatchRobber (this);
     }
 }

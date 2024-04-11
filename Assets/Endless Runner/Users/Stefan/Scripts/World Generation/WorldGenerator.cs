@@ -115,12 +115,13 @@ public class WorldGenerator : MonoBehaviour
             float distance = Vector3.Distance (tail.position, loader.position);
 
             lastPlayerTilePos = playerTilePos;
-            OnPlayerMoved?.Invoke ( );
 
             if ( distance <= loadDistance )
             {
                 ContinueGeneration ( );
             }
+
+            OnPlayerMoved?.Invoke ( );
         }
     }
 

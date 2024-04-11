@@ -113,6 +113,8 @@ public class LaneMovement : MonoBehaviour
         {
             CurrentLane++;
         }
+        Debug.Log ("Right");
+
     }
 
     public void MoveToLaneLeft ( )
@@ -121,11 +123,14 @@ public class LaneMovement : MonoBehaviour
         {
             CurrentLane--;
         }
+
+        Debug.Log ("Left");
     }
 
     protected virtual void OnCurrentLaneSwitched ( )
     {
         CurrentLanePosition = new (LANE_SIZE * CurrentLane, 0, 0);
+        Debug.Log (CurrentLane);
     }
 
     #endregion Lane Movement

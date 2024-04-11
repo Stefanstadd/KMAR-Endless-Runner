@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87aa9cf6b45d193418fcb4b3741af748, type: 3}
-  m_Name: City Cars
+  m_Script: {fileID: 11500000, guid: 565b0c75d7a16564cb840427d2bf0939, type: 3}
+  m_Name: Cars 2
   m_EditorClassIdentifier: 
   obstaclePrefabs:
   - {fileID: 7611024337694948493, guid: c55ab902b92e4f9449cb2841e76e7313, type: 3}
@@ -20,7 +20,4 @@ MonoBehaviour:
   - {fileID: 177544185869872286, guid: 6f4375b478c6b734daea9e1a774e3bb4, type: 3}
   - {fileID: 4765062407600424076, guid: 2e433aa7082b48b41a7792d58a766cd5, type: 3}
   obstacleLaneState: 1
-  streetLength: 10
-  spawnOffset: -0.4
-  baseYPos: 0.12
-  scale: 0.82322
+  yLevel: 0.13

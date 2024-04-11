@@ -15,13 +15,15 @@ public class RobbersManager : MonoBehaviour
 
     public GameObject robberPrefab;
 
+    public GameObject robberCatchEffect;
+
     private float spawnTimer;
 
     public UnityEvent onRobberCaught;
 
     private void Start ( )
     {
-        //StartGame ( );
+        StartGame ( );
     }
 
     private void StartGame ( )
@@ -70,6 +72,8 @@ public class RobbersManager : MonoBehaviour
     public void CatchRobber ( Robber robber )
     {
         robbers.Remove (robber);
+        Destroy (Instantiate (robberCatchEffect, robber.body.position, Quaternion.identity), 3f);
+
         Destroy (robber.gameObject);
         OnRobberCaught ( );
     }

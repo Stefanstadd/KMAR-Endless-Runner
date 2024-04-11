@@ -7,8 +7,6 @@ public class CarObstacle : ObstacleObject
     public float spawnOffset;
     public float baseYPos;
 
-    public float scale = 0.82322f;
-
     public override ObstacleData GenerateObstacle ( WorldNode node )
     {
         int lane = Random.Range (-1, 1);
@@ -16,7 +14,6 @@ public class CarObstacle : ObstacleObject
 
         GameObject car = Instantiate (RandomPrefab, spawnPos, Quaternion.identity);
         car.transform.localEulerAngles = Vector3.up * WorldGenerator.AngleFromDirection (node.direction);
-        car.transform.localScale = Vector3.one * scale;
 
         ObstacleData data = new ObstacleData
         {
