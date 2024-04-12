@@ -205,10 +205,9 @@ public class TerrainGenerator : MonoBehaviour
 
         if ( nodesToCheck != null && nodesToCheck.Count > 0 )
         {
-            float minDistance = nodesToCheck.Min (n => Vector3.Distance (vertex, n.position));
-            if ( minDistance < pathDstDampen )
+            if ( Mathf.Abs(vertex.x) < pathDstDampen )
             {
-                float mult = Mathf.InverseLerp (0, pathDstDampen, minDistance);
+                float mult = Mathf.InverseLerp (0, pathDstDampen, Mathf.Abs (vertex.x));
 
                 noise *= mult * pathDampMultiplier;
             }

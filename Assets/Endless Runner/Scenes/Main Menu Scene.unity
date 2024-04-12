@@ -10570,7 +10570,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrain: {fileID: 1418295769}
-  renderDistance: 80
+  renderDistance: 300
   player: {fileID: 961739753}
 --- !u!4 &503841403
 Transform:
@@ -33463,8 +33463,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldGenerator: {fileID: 1587128939}
   chunkManager: {fileID: 503841402}
-  generateDistance: 120
-  renderDistance: 140
+  generateDistance: 300
+  renderDistance: 300
   planeSize: 32
   vertexDensity: 3
   chunkPrefab: {fileID: 2192737860780606028, guid: 68f293b9a37e2214391ddace2a15b125,
@@ -39181,7 +39181,7 @@ MonoBehaviour:
   biomes:
   - biomeName: City
     biomeColor: {r: 0.4867924, g: 0.38903475, b: 0.31136343, a: 1}
-    sideWayChance: 20
+    sideWayChance: 8
     generalObstacleChance: -4
     forwardTile:
       prefabs:
@@ -39190,16 +39190,62 @@ MonoBehaviour:
       - {fileID: 1524974496093470081, guid: f76f6a8d53995294a8bba410f9876aef, type: 3}
       - {fileID: 5594915572113147585, guid: 0f050e59fff31cc42b114fb0348e73b3, type: 3}
       - {fileID: 2580755212961956359, guid: b10124d85513af74faabd1f2b14c2f56, type: 3}
-      obstacleChance: 80
+      - {fileID: 7825744118658075861, guid: e2b7544ceda8f294ab5a594b71a4e535, type: 3}
+      - {fileID: 7825744118658075861, guid: ac468147366d992478bde19e811cd03b, type: 3}
+      obstacleChance: 100
       obstacles:
       - {fileID: 11400000, guid: 133dde47b05d43d419f7766a97ef5a00, type: 2}
       - {fileID: 11400000, guid: 2049500bc9bf02b41934f307d38fdd96, type: 2}
+      - {fileID: 11400000, guid: 47dde97b858501b47b4dc81a501912e8, type: 2}
+      - {fileID: 11400000, guid: c997a776dc504d043a5128167eeb5572, type: 2}
     forwardSidewaysTile:
       prefabs:
       - {fileID: 6681309217355209998, guid: bc682a23f0618ed42a50c171dc37fa6f, type: 3}
       obstacleChance: 80
       obstacles:
       - {fileID: 11400000, guid: 2049500bc9bf02b41934f307d38fdd96, type: 2}
+      - {fileID: 11400000, guid: 47dde97b858501b47b4dc81a501912e8, type: 2}
+    leftTile:
+      prefabs:
+      - {fileID: 714341285840203267, guid: 055072296d55b134897fd76d99fd7d0c, type: 3}
+      obstacleChance: 80
+      obstacles:
+      - {fileID: 11400000, guid: 2049500bc9bf02b41934f307d38fdd96, type: 2}
+    rightTile:
+      prefabs:
+      - {fileID: 6636442952704113597, guid: 1ecdcc39de2b80c49a558bad2bb3bc3e, type: 3}
+      obstacleChance: 80
+      obstacles:
+      - {fileID: 11400000, guid: 47dde97b858501b47b4dc81a501912e8, type: 2}
+      - {fileID: 11400000, guid: 2049500bc9bf02b41934f307d38fdd96, type: 2}
+  - biomeName: Snow
+    biomeColor: {r: 0.6396227, g: 1, b: 0.87670994, a: 1}
+    sideWayChance: 8
+    generalObstacleChance: -4
+    forwardTile:
+      prefabs:
+      - {fileID: 6637682264005436449, guid: 82eabdc413a5e2a48a1574672209c5ed, type: 3}
+      - {fileID: 5594915572113147585, guid: 30473b0e9e39f4b42a47d9bddf7ace28, type: 3}
+      - {fileID: 5880200281193705588, guid: 6b152e04e9049ba4183f8935cb3132d1, type: 3}
+      - {fileID: 8922228633687232102, guid: dc289e1d9b1662d4f8561574d3a02106, type: 3}
+      - {fileID: 2580755212961956359, guid: b10124d85513af74faabd1f2b14c2f56, type: 3}
+      - {fileID: 7825744118658075861, guid: 1af5caf0888f2e04cb246d0265e161ca, type: 3}
+      obstacleChance: 100
+      obstacles:
+      - {fileID: 11400000, guid: 2049500bc9bf02b41934f307d38fdd96, type: 2}
+      - {fileID: 11400000, guid: 47dde97b858501b47b4dc81a501912e8, type: 2}
+      - {fileID: 11400000, guid: 37c8b7d93f48f3541b74aced66b8099e, type: 2}
+    forwardSidewaysTile:
+      prefabs:
+      - {fileID: 6637682264005436449, guid: 82eabdc413a5e2a48a1574672209c5ed, type: 3}
+      - {fileID: 5594915572113147585, guid: 30473b0e9e39f4b42a47d9bddf7ace28, type: 3}
+      - {fileID: 5880200281193705588, guid: 6b152e04e9049ba4183f8935cb3132d1, type: 3}
+      - {fileID: 8922228633687232102, guid: dc289e1d9b1662d4f8561574d3a02106, type: 3}
+      - {fileID: 7825744118658075861, guid: 1af5caf0888f2e04cb246d0265e161ca, type: 3}
+      obstacleChance: 100
+      obstacles:
+      - {fileID: 11400000, guid: 2049500bc9bf02b41934f307d38fdd96, type: 2}
+      - {fileID: 11400000, guid: 47dde97b858501b47b4dc81a501912e8, type: 2}
     leftTile:
       prefabs:
       - {fileID: 714341285840203267, guid: 055072296d55b134897fd76d99fd7d0c, type: 3}

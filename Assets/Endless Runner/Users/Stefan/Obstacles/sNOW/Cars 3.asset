@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 565b0c75d7a16564cb840427d2bf0939, type: 3}
+  m_Name: Cars 3
+  m_EditorClassIdentifier: 
+  obstaclePrefabs:
+  - {fileID: 7225766185944169531, guid: 72b10dc743527dc4782d7df7d5993573, type: 3}
+  - {fileID: 2519066613433321921, guid: 54ca4309479390a4491d3a23033ea413, type: 3}
+  - {fileID: 4240957344645508527, guid: f86df2774433a344a9263213003faa78, type: 3}
+  - {fileID: 2044834526790436334, guid: e12155ad554c01e429af9a0ff9deaaf7, type: 3}
+  - {fileID: 1440073492047641009, guid: c804c35cdafb8cf4ab94a5f266f3a678, type: 3}
+  - {fileID: 4140247122193051183, guid: 07795a2f530e0804fbf87bfce426f5cc, type: 3}
+  obstacleLaneState: 1
+  yLevel: 0.13

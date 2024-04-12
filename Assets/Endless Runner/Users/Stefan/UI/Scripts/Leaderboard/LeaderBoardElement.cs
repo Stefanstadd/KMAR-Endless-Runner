@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using TMPro.EditorUtilities;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class LeaderBoardElement : MonoBehaviour
@@ -15,7 +11,7 @@ public class LeaderBoardElement : MonoBehaviour
 
     public TextMeshProUGUI numberElement, nameElement, distanceElement, robberCaughtElement, timeAliveElement, timePerRobberElement;
 
-    public void Initialize (int number, LeaderBoardEntry entry )
+    public void Initialize ( int number, LeaderBoardEntry entry )
     {
         numberElement.text = $"{number}.";
 
@@ -54,12 +50,12 @@ public class LeaderBoardElement : MonoBehaviour
         }
     }
 
-    void SetColors (Color colr )
+    void SetColors ( Color colr )
     {
         SetElementsColor (colr, numberElement, nameElement, distanceElement, robberCaughtElement, timeAliveElement, timePerRobberElement);
     }
 
-    void SetElementsColor(Color col, params Graphic[] graphics )
+    void SetElementsColor ( Color col, params Graphic[] graphics )
     {
         foreach ( var g in graphics )
         {
